@@ -1,3 +1,103 @@
-site_name: My Docs
+site_name: SmartAss Plug
+
+nav:
+  - Home: index.md
+  - 'Make It':
+    - 'Sourcing the Parts': MakeIt/sourcing.md
+    - '3D Printing': MakeIt/printing.md
+    - 'Assemble the Plug': MakeIt/assembly.md
+  #  - 'Flash the Firmware': MakeIt/flashfirmware.md
+  - 'Use It':
+    - 'Safety Notes': UseIt/safety.md
+  #   - 'User Interface': UseIt/userinterface.md
+  #   - 'Use a BLE Selfie Button': UseIt/selfiebutton.md
+  # - 'Hack It':
+  #   - 'WebSocket API': HackIt/websocketapi.md
+  #   - 'Custom Firmware': HackIt/firmware.md
+
+
+site_author: elims
+site_description: >-
+  DESCRIPTION
+
+# Repository
+repo_name: theelims/SmartAssPlug
+repo_url: https://github.com/theelims/SmartAssPlug
+
 theme:
   name: material
+  logo: assets/Elims_Bunny_Logo.svg
+  favicon: assets/Elims_Bunny_Logo.png
+  icon:
+    repo: fontawesome/brands/github
+  palette: 
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night 
+        name: Switch to dark mode
+      primary: deep purple
+      accent: indigo
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+      primary: deep purple
+      accent: indigo
+  
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - toc.follow
+    - navigation.top
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - tables
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/theelims/
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/theelims/
+    - icon: fontawesome/brands/instagram
+      link: https://www.instagram.com/the_elims/
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/hephqY2m8A
+  consent:
+    title: Cookie consent
+    description: >- 
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+    actions:
+      - accept
+      - reject
+
+
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
+
+
+copyright: |
+  Copyright &copy; 2023 <a href="https://github.com/theelims"  target="_blank" rel="noopener">elims</a> -
+  <a href="#__consent">Change cookie settings</a>
