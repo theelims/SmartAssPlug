@@ -9,16 +9,19 @@ nav:
   #  - 'Flash the Firmware': MakeIt/flashfirmware.md
   - 'Use It':
     - 'Safety Notes': UseIt/safety.md
+  #   - 'Connect to your Network': UseIt/wifi.md
   #   - 'User Interface': UseIt/userinterface.md
   #   - 'Use a BLE Selfie Button': UseIt/selfiebutton.md
   # - 'Hack It':
+  #   - 'Principal of Operation': HackIt/algorithm.md
   #   - 'WebSocket API': HackIt/websocketapi.md
   #   - 'Custom Firmware': HackIt/firmware.md
 
 
 site_author: elims
 site_description: >-
-  DESCRIPTION
+  A self-contained, open source and gender agnostic smart butt plug that can sense your sexual arousal level. 
+  Ride the edge or incorporate orgasm detection into your play. 
 
 # Repository
 repo_name: theelims/SmartAssPlug
@@ -26,8 +29,8 @@ repo_url: https://github.com/theelims/SmartAssPlug
 
 theme:
   name: material
-  logo: assets/Elims_Bunny_Logo.svg
-  favicon: assets/Elims_Bunny_Logo.png
+  logo: assets/Elims_Bunny_Logo_white.svg
+  favicon: assets/Elims_Bunny_Logo_white.png
   icon:
     repo: fontawesome/brands/github
   palette: 
@@ -57,6 +60,7 @@ theme:
     - toc.integrate
     - toc.follow
     - navigation.top
+    - navigation.footer
 
 markdown_extensions:
   - attr_list
@@ -99,5 +103,5 @@ plugins:
 
 
 copyright: |
-  Copyright &copy; 2023 <a href="https://github.com/theelims"  target="_blank" rel="noopener">elims</a> -
+  Copyright &copy; 2023 by <a href="https://github.com/theelims"  target="_blank" rel="noopener">elims</a> -
   <a href="#__consent">Change cookie settings</a>
