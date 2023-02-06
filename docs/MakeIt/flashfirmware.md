@@ -1,5 +1,9 @@
 # Flash the Firmware
 
-## ESP Webflash
+!!! info "Firmware not yet close to release"
 
-## ESP Flash Utility
+    The firmware is still under heavy development. So far all parts of the PCB have confirmed to work as expected.
+
+<!-- ## ESP Webflash -->
+
+<!-- ## ESP Flash Utility -->

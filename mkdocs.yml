@@ -6,7 +6,7 @@ nav:
     - 'Sourcing the Parts': MakeIt/sourcing.md
     - '3D Printing': MakeIt/printing.md
     - 'Assemble the Plug': MakeIt/assembly.md
-  #  - 'Flash the Firmware': MakeIt/flashfirmware.md
+    - 'Flash the Firmware': MakeIt/flashfirmware.md
   - 'Use It':
     - 'Safety Notes': UseIt/safety.md
   #   - 'Connect to your Network': UseIt/wifi.md

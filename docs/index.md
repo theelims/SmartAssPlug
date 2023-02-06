@@ -10,9 +10,9 @@ hide:
 
 # SmartAss Plug - A Smart Butt Plug
 
-Everything becomes "smart" these days. And there is no exception for butt plugs. While many butt plugs claim "smartness", just connecting it to the internet typically only means a remote control with more range. However **SmartAss Plug** has some more tricks up its sleeves. It's main purpose is not to vibrate a butt, but to sense and gauge sexual arousal. Having a reliable way to measure sexual arousal and orgasms opens up many possibility for the kinky minded person. Pneumatic anal probes have long time being the preferred choice in the clinical sector. However, in the kinky maker space the inflatable butt plug has gained more traction. Not least because of open source projects like the [nogasm](https://github.com/nogasm/nogasm) and the [protogasm](https://github.com/night-howler/protogasm). However, the inflatable butt plug suffers from a really bad signal to noise ratio. **SmartAss Plug** tries to build on these groundwork adding a more reliable sensor element, a more robust clench detection algorithm utilizing a kalman filter and calculus. All in a self-contained unit doing away any trip wires. In order to control a pleasure inducing device it connects to [XToys](https://xtoys.app/) or [buttplug.io](https://buttplug.io/) / [infitface](https://github.com/intiface/intiface-central).
+Everything becomes "smart" these days. And there is no exception for butt plugs. While many butt plugs claim "smartness", just connecting it to the internet typically only means a remote control with more range. However **SmartAss Plug** has some more tricks up its sleeves. It's main purpose is not to vibrate a butt, but to sense and gauge sexual arousal. Having a reliable way to measure sexual arousal and orgasms opens up many possibility for the kinky minded person. Pneumatic anal probes have long time being the preferred choice in the clinical sector. However, in the kinky maker space the inflatable butt plug has gained more traction. Not least because of open source projects like the [nogasm](https://github.com/nogasm/nogasm) and the [protogasm](https://github.com/night-howler/protogasm). However, the inflatable butt plug suffers from a really bad signal to noise ratio. **SmartAss Plug** tries to build on these groundwork adding a more reliable sensor element, a more robust clench detection algorithm utilizing a kalman filter and calculus. All in a self-contained unit doing away with trip wires. In order to control a pleasure inducing device it connects to [XToys](https://xtoys.app/) or [buttplug.io](https://buttplug.io/) / [infitface](https://github.com/intiface/intiface-central).
 
-Naturally it vibrates, too (kind of a the minimum requirement, obviously) and comes with more fun like a 9-DoF IMU and RGB Leds. Because, why not?
+Naturally it vibrates, too (kind of a minimum requirement, obviously) and comes with more fun like a 9-DoF IMU and RGB Leds. Because, why not?
 
 And last but not least, you are finally able to serve a website straight from your ass. How far has humanity come?
 
@@ -52,6 +52,8 @@ Yes, the plug is available in 3 different sizes to accommodate a wide range of t
 | **XS** | :material-close: |  25 mm   |
 | **S**  | :material-check: |  30 mm   |
 | **M**  | :material-check: |  38 mm   |
+
+![SmartAss Plug](img/SmartAssBanana.jpg){ width="480" }
 
 ## Contributors and Sources of Inspiration
 
