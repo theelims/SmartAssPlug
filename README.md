@@ -41,9 +41,9 @@ Yes, the plug is available in 3 different sizes to accommodate a wide range of t
 
 |  Size  |    Vibration     | Diameter |
 | :----: | :--------------: | :------: |
-| **XS** | :material-close: |  25 mm   |
-| **S**  | :material-check: |  30 mm   |
-| **M**  | :material-check: |  38 mm   |
+| **XS** | No               |  25 mm   |
+| **S**  | Yes              |  30 mm   |
+| **M**  | Yes              |  38 mm   |
 
 ## Contributors and Sources of Inspiration
 
