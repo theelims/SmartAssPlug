@@ -37,7 +37,7 @@ SmartAss Plug offers a WebSocket API which makes it easy to integrate. XToys and
 
 Yes, the plug is available in 3 different sizes to accommodate a wide range of tastes.
 
-![SmartAss Plug](img/SmartAssPlugTrio.jpg){ width="480" }
+![SmartAss Plug](docs/img/SmartAssPlugTrio.jpg)
 
 |  Size  |    Vibration     | Diameter |
 | :----: | :--------------: | :------: |
