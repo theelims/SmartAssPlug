@@ -31,8 +31,6 @@ All parts print without supports enabled. Except for _SmartAssPlug_S_Plug.stl_ a
 
     Due to the thin layer height of the top solid layers they can sink in on the shallow sloped top surface. If you run into this issue, then use a height modifier in the slicer for these few millimeters and modify the infill to 100%.
 
-If you experience issues with the print not sticking to your build surface
-
 ### Transparent Cap
 
 Since this part must diffuse the RGB leds it must be printed with optical properties in mind. Best results I got with these settings:

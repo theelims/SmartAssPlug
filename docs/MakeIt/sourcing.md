@@ -6,13 +6,15 @@ As you can't buy the plug off the shelf making it is up to you. This might be da
 
 - 3D printer
 - Soldering Iron + Solder (SmartAss Plug S & M only)
-- Sandpaper, various grids
+- Sandpaper, various grids starting from 120 and finer
 - Scotch-Brite red and black
 - Scissors
 - Screwdriver Philipps #1
 - Cleaned pickles jar, big enough for the intended plug size
 - Acetone
 - Paper Towel
+- Acetone-proof brush
+- IPA and lint-free cloth
 
 ## Bill of Material Plug
 
