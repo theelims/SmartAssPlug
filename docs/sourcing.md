@@ -1,6 +1,6 @@
 # Source all Parts for Your Plug
 
-As you can't buy the plug off the shelf making it is up to you. This might be daunting at first, but if you already own a 3D printer you figured out the hard part already. But even if you don't own a printer yourself there are numerous service providers out happily accepting your money. Same goes for the electronics. You can practice SMD assembly and order the board from your preferred PCB house. Or you can throw money at the problem and get ready made and assembled from several sources in China.
+As you can't buy the plug off the shelf making it is up to you. This might be daunting at first, but if you already own a 3D printer you figured out the hard part already. But even if you don't own a printer yourself there are numerous service providers out happily accepting your money. Same goes for the electronics. You can practice SMD assembly and order the board from your preferred PCB house. Or you can throw money at the problem and get ready made and assembled boards from several sources in China.
 
 ## Tools needed
 
