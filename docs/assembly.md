@@ -1,6 +1,6 @@
 # Assemble Your SmartAss Plug
 
-![SmartAss Plug Assembly](/img/SmartAssExplode.jpg){ width="480" }
+![SmartAss Plug Assembly](img/SmartAssExplode.jpg){ width="480" }
 
 Assembly of a SmartAss Plug is not difficult. But take your time and do the steps with care to achieve the optimal result.
 
@@ -12,15 +12,15 @@ Assembly of a SmartAss Plug is not difficult. But take your time and do the step
 
 As a very first step check wether the tip fits nicely on the plug. By slightly screwing the tip on it should stick without leaving a visible gap. If your seems are noticeable, sand them on the inside and the outside of the conus.
 
-![SmartAss Plug Wires](/img/MotorSolderWire.jpg){ width="480" }
+![SmartAss Plug Wires](img/MotorSolderWire.jpg){ width="480" }
 
 Soldering around 20-30 cm of silicone wire onto the motor terminals of the vibration motor. The polarity or the color of the wires doesn't matter. Carefully thread the wires one-by-one through the center hole into the main body.
 
-![SmartAss Plug Press Fit](/img/MotorPressFit.jpg){ width="480" }
+![SmartAss Plug Press Fit](img/MotorPressFit.jpg){ width="480" }
 
 Press the motor into the press-fit of the plug. This requires some force. If not, then you should consider working on your printers dimensional accuracy and reprint the part. The housing of the motor should only sick around 1-2 mm out of the plug's body.
 
-![SmartAss Plug Prepare Weld](/img/WeldPrepare.jpg){ width="480" }
+![SmartAss Plug Prepare Weld](img/WeldPrepare.jpg){ width="480" }
 
 Prepare the weld by preparing some acetone and a acetone-proof brush. ASA and ABS can be welded by dissolving the surface with acetone. This weld is extremely strong and destructive testing showed, that it is impossible to destroy.
 
@@ -33,16 +33,16 @@ Prepare the weld by preparing some acetone and a acetone-proof brush. ASA and AB
     The acetone evaporates rather quick. The parts must be pressed on wet on both sides of the cone. Work quickly and accurate. Rework is not possible once it is welded.
 
 <div style=flex>
-<img src="/img/WeldApply01.jpg" style="width:320px"> 
-<img src="/img/WeldApply02.jpg" style="width:320px"> 
+<img src="img/WeldApply01.jpg" style="width:320px"> 
+<img src="img/WeldApply02.jpg" style="width:320px"> 
 </div>
 Apply the acetone on both, inside and outside of the cones. Work quickly, as the acetone evaporates fast. Add a second or third round of acetone if needed. The parts must be pressed together wet in wet. Don't mind if the acetone will run onto other parts of your print. This will be taken care of during post processing.
 
-![SmartAss Plug Weld Seam](/img/WeldSeam.jpg){ width="480" }
+![SmartAss Plug Weld Seam](img/WeldSeam.jpg){ width="480" }
 
 Press the tip on the plug with as much force as possible. A twisting motion will distribute molten plastic inside the seam and fill the gaps. The ideal seam will noticeably bulge.
 
-![SmartAss Plug Sanding Seam](/img/WeldFinish01.jpg){ width="480" }
+![SmartAss Plug Sanding Seam](img/WeldFinish01.jpg){ width="480" }
 
 Once the weld has solidified you can start sanding away the seam with sandpaper. Start with 120 grid and work towards finer grids.
 
@@ -59,15 +59,15 @@ Once the weld has solidified you can start sanding away the seam with sandpaper.
 For an optimal, high-gloss, germ friendly and watertight finish the plug must be polished with acetone fumes. For optimal results you should sand away the layer lines.
 
 <div style=flex>
-<img src="/img/WeldFinish02.jpg" style="width:320px"> 
-<img src="/img/WeldFinish03.jpg" style="width:320px"> 
+<img src="img/WeldFinish02.jpg" style="width:320px"> 
+<img src="img/WeldFinish03.jpg" style="width:320px"> 
 </div>
 
 Start with fine sandpaper and continue with the scotch-brite. First the red, medium coarse. And finally the black fine non-woven. Take your time for this step. The better the layer lines disappear, the better will be the polished results.
 
 Remove any dust and finger prints from sanding with IPA and a lint-free cloth. If you have a plug with vibration motor stow away te excess cables inside the electronics compartment.
 
-![SmartAss Plug Acetone Polish](/img/PolishJar.jpg){ width="480" }
+![SmartAss Plug Acetone Polish](/docs/img/PolishJar.jpg){ width="480" }
 
 Use a pickles jar big enough to contain the whole plug. Inside the jar place some paper towels to hold the acetone. This should be at the very top of the jar, so that the acetone vapour concentration is also up there. Wet the paper towels with acetone. Make sure that you do not over-saturate them. There should be no acetone running down the sides.
 

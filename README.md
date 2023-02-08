@@ -39,11 +39,11 @@ Yes, the plug is available in 3 different sizes to accommodate a wide range of t
 
 ![SmartAss Plug](docs/img/SmartAssPlugTrio.jpg)
 
-|  Size  |    Vibration     | Diameter |
-| :----: | :--------------: | :------: |
-| **XS** | No               |  25 mm   |
-| **S**  | Yes              |  30 mm   |
-| **M**  | Yes              |  38 mm   |
+|  Size  | Vibration | Diameter |
+| :----: | :-------: | :------: |
+| **XS** |    No     |  25 mm   |
+| **S**  |    Yes    |  30 mm   |
+| **M**  |    Yes    |  38 mm   |
 
 ## Contributors and Sources of Inspiration
 
@@ -61,12 +61,8 @@ Copyright &copy; 2023 by <a href="https://github.com/theelims"  target="_blank" 
 
 All work - software and hardware - is licensed under the
 
-**:fontawesome-brands-creative-commons: :fontawesome-brands-creative-commons-by: :fontawesome-brands-creative-commons-sa: Creative Commons Attribution-ShareAlike 4.0 International Public License**
+Creative Commons Attribution-ShareAlike 4.0 International Public License\*\*
 
 For a full text of the license visit [CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-
-!!! Question "Can I sell this on my webshop?"
-
-    Yes, of course! You may start producing the PCB and the plug and sell it on your shop. The license was deliberately chosen to allow a commercial use by whoever is willing to go through the woes of starting their own business. However, the tech-kinky scene is rather limited in size and thus you must give back any improvements such that the kinky maker scene can take advantages of it. Please drop me a note if you sell it, so that I can include it into the sourcing guide.
 
 # For further information visit the [project site](https://theelims.github.io/SmartAssPlug/).

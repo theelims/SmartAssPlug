@@ -3,19 +3,19 @@ site_name: SmartAss Plug
 nav:
   - Home: index.md
   - 'Make It':
-    - 'Sourcing the Parts': MakeIt/sourcing.md
-    - '3D Printing': MakeIt/printing.md
-    - 'Assemble the Plug': MakeIt/assembly.md
-    - 'Flash the Firmware': MakeIt/flashfirmware.md
+    - sourcing.md
+    - printing.md
+    - assembly.md
+    - flashfirmware.md
   - 'Use It':
-    - 'Safety Notes': UseIt/safety.md
-  #   - 'Connect to your Network': UseIt/wifi.md
-  #   - 'User Interface': UseIt/userinterface.md
-  #   - 'Use a BLE Selfie Button': UseIt/selfiebutton.md
-  # - 'Hack It':
-  #   - 'Principal of Operation': HackIt/algorithm.md
-  #   - 'WebSocket API': HackIt/websocketapi.md
-  #   - 'Custom Firmware': HackIt/firmware.md
+    - safety.md
+    - wifi.md
+    - userinterface.md
+    - selfiebutton.md
+  - 'Hack It':
+    - algorithm.md
+    - websocketapi.md
+    - firmware.md
 
 
 site_author: elims
