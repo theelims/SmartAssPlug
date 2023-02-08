@@ -33,8 +33,8 @@ Prepare the weld by preparing some acetone and a acetone-proof brush. ASA and AB
     The acetone evaporates rather quick. The parts must be pressed on wet on both sides of the cone. Work quickly and accurate. Rework is not possible once it is welded.
 
 <div style=flex>
-<img src="img/WeldApply01.jpg" style="width:320px"> 
-<img src="img/WeldApply02.jpg" style="width:320px"> 
+<img src="../img/WeldApply01.jpg" style="width:320px"> 
+<img src="../img/WeldApply02.jpg" style="width:320px"> 
 </div>
 Apply the acetone on both, inside and outside of the cones. Work quickly, as the acetone evaporates fast. Add a second or third round of acetone if needed. The parts must be pressed together wet in wet. Don't mind if the acetone will run onto other parts of your print. This will be taken care of during post processing.
 
@@ -59,15 +59,15 @@ Once the weld has solidified you can start sanding away the seam with sandpaper.
 For an optimal, high-gloss, germ friendly and watertight finish the plug must be polished with acetone fumes. For optimal results you should sand away the layer lines.
 
 <div style=flex>
-<img src="img/WeldFinish02.jpg" style="width:320px"> 
-<img src="img/WeldFinish03.jpg" style="width:320px"> 
+<img src="../img/WeldFinish02.jpg" style="width:320px"> 
+<img src="../img/WeldFinish03.jpg" style="width:320px"> 
 </div>
 
 Start with fine sandpaper and continue with the scotch-brite. First the red, medium coarse. And finally the black fine non-woven. Take your time for this step. The better the layer lines disappear, the better will be the polished results.
 
 Remove any dust and finger prints from sanding with IPA and a lint-free cloth. If you have a plug with vibration motor stow away te excess cables inside the electronics compartment.
 
-![SmartAss Plug Acetone Polish](/docs/img/PolishJar.jpg){ width="480" }
+![SmartAss Plug Acetone Polish](img/PolishJar.jpg){ width="480" }
 
 Use a pickles jar big enough to contain the whole plug. Inside the jar place some paper towels to hold the acetone. This should be at the very top of the jar, so that the acetone vapour concentration is also up there. Wet the paper towels with acetone. Make sure that you do not over-saturate them. There should be no acetone running down the sides.
 
