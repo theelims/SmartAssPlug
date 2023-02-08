@@ -4,6 +4,10 @@ hide:
   - toc
 ---
 
+!!! warning "This project is in a very early stage"
+
+    This project is in its infancy. The PCB may still contain undiscovered bugs. And a firmware is not yet available. Do not attempt to recreate this unless you really know what you are doing and want to contribute to this project.
+
 <figure markdown>
   ![SmartAss Plug](img/SmartAssPlug.jpg){ width="800" }
 </figure>

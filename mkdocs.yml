@@ -6,16 +6,16 @@ nav:
     - sourcing.md
     - printing.md
     - assembly.md
-    - flashfirmware.md
+  #   - flashfirmware.md
   - 'Use It':
     - safety.md
-    - wifi.md
-    - userinterface.md
-    - selfiebutton.md
-  - 'Hack It':
-    - algorithm.md
-    - websocketapi.md
-    - firmware.md
+  #   - wifi.md
+  #   - userinterface.md
+  #   - selfiebutton.md
+  # - 'Hack It':
+  #   - algorithm.md
+  #   - websocketapi.md
+  #   - firmware.md
 
 
 site_author: elims

@@ -81,4 +81,69 @@ Once the time is up remove the jar and let the plug dry. Do not touch the plug u
 
 ## Install the Silicone Tubing
 
+![SmartAss Plug Tube Installation](img/TubeInstallTools.jpg){ width="480" }
+
+To install the silicone tube which serves as the pressure sensor you'll need a fine tipped tweezer. The installation is a little bit fiddly, but with the right tricks not that hard.
+
+<div style=flex>
+<img src="../img/TubeInstallKnot.jpg" style="width:320px"> 
+<img src="../img/TubeInstall03.jpg" style="width:320px"> 
+</div>
+
+Start by making a single knot 5-6 cm away from the tube end. Pull the knot really tight. It will seal the one end of the tube. Use the tweezers to push the short end into the hole where the tube will later exit to form the coil. Inside that hole there is a special cavity for the knot. Try to push the tube as deep inside the cavity as possible.
+
+!!! warning "Don't Damage the Tube"
+
+    These tweezers are quite sharp and easily punctuate the tube. Be especially cautious.
+
+<div style=flex>
+<img src="../img/TubeInstall02.jpg" style="width:320px"> 
+<img src="../img/TubeInstall05.jpg" style="width:320px"> 
+</div>
+
+Then try to grab the end of the tube from the other side (this hole will be hidden later) and pull it through. Gently pull it until the knot is at the hole. Then try to pull the knot inside the cavity. This requires some force and most likely it will snap right through and exit on the other side. Don't panic. Pull it gently back into the cavity, while holding the short end under tension. With this trick the knot will stay safely inside the plug.
+
+![SmartAss Plug Tube Installation](img/TubeInstall07.jpg){ width="480" }
+
+Finally wrap the tube around the shaft of the plug. Apply a slight tension so that the winding is tight and compact. Finally thread the remaining tube through the bottom hole. Use the tweezers to assist in the task.
+
 ## Mount the PCB
+
+![SmartAss Plug PCB Installation](img/MountPCBMotor.jpg){ width="480" }
+
+Cut the vibration motor wires to around 30-40 mm measured from where the leave the shaft. Solder them to one set of motor pads. You can use either of the motor solder pads.
+
+<div style=flex>
+<img src="../img/MountPCBSprings.jpg" style="width:320px"> 
+<img src="../img/MountPCBSensor.jpg" style="width:320px"> 
+</div>
+
+!!! warning "The Springs are Mandatory"
+
+    These springs are extremely important for the plug to work properly. The silicone tube is very thin walled and kinks easy in bends. Inside the electronics compartment it is very tight and the tube needs well defined bends. The springs will prevent the walls of the tube from collapsing. If you leave the springs out the probability is very high, that your plug won't work.
+
+Cut the silicone tube to 40 mm measured from where it enters the electronics compartment. Push the 2 mm x 45 mm spring into the tube. It should stick out 3-5 mm when completely pushed in. If you've cut the tube too short, you can massage a few millimeters out of the coil. It is important, that the inner spring has some compression. Push the 4 mm x 10 mm outer spring over the tube, so that it sits flush with the bottom.
+
+Then press the tube and springs over the port of the pressure sensor. The outer spring serves both as a retainer clip, as well as a kink protection for the very tight bend right after the sensor.
+
+![SmartAss Plug PCB Installation](img/MountPCB.jpg){ width="480" }
+
+Install the battery in the connector. Check the polarity of your battery with the **+** and **-** symbols on the PCB's silkscreen. If your battery has a reversed polarity use a thin needle to remove the crimp connectors out of the plug and push them in in the right order. Don't short the battery in the process.
+
+!!! danger "Double Check the Polarity of the Battery"
+
+    **Failing to do so will inevitably damage your PCB!** There is no reverse polarity protection for the battery.
+
+Gently slide the PCB into the recess of the plug's body. The silicone tube will twist itself in in the exact right way.
+
+![SmartAss Plug Battery Installation](img/MountPCBBattery.jpg){ width="480" }
+
+Install the battery as shown in the picture. The part with the protection PCB must go to the battery connector side giving room for the silicone tube. If the wires of the motor get in your way, or get stuck under the battery use tweezers or a screwdriver to position them between the ESP's shield and the battery. Same goes for the wires of the battery itself.
+
+![SmartAss Plug Battery Completed](img/MountPCBfinal.jpg){ width="480" }
+
+The final result should look like this. The wires for the motor and the battery should fit between battery and the PCB. Last but not least mount the transparent cap with the two screws and start charging the battery.
+
+![SmartAss Plug Battery Completed](img/SmartAssCharge.jpg){ width="480" }
+
+Take a moment and enjoy the results of your hard work. Your plug is ready to receive the firmware now.
