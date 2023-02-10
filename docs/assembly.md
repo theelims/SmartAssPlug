@@ -1,10 +1,10 @@
-# Assemble Your SmartAss Plug
+# Assemble the Plug
 
 ![SmartAss Plug Assembly](img/SmartAssExplode.jpg){ width="480" }
 
 Assembly of a SmartAss Plug is not difficult. But take your time and do the steps with care to achieve the optimal result.
 
-## Glueing in the Vibration Motor
+## Installing the Vibration Motor
 
 !!! info "This chapter does not apply for the SmartAss Plug XS"
 
@@ -94,7 +94,7 @@ Start by making a single knot 5-6 cm away from the tube end. Pull the knot reall
 
 !!! warning "Don't Damage the Tube"
 
-    These tweezers are quite sharp and easily punctuate the tube. Be especially cautious.
+    These tweezers are quite sharp and easily puncture the tube. Be especially cautious.
 
 <div style=flex>
 <img src="../img/TubeInstall02.jpg" style="width:320px"> 

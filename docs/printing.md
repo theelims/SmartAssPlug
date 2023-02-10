@@ -1,4 +1,4 @@
-# Print Your Plug
+# 3D Printing
 
 ## Recommended Filaments
 
