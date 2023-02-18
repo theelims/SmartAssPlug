@@ -27,7 +27,7 @@ Using an inflatable butt plug is the traditional approach for edging and orgasm 
 
 ### Where can I buy this?
 
-So far you can't buy it. You need to build it yourself sourcing all the required materials on your own. Consult the [sourcing guide](MakeIt/sourcing.md) for more information.
+So far you can't buy it. You need to build it yourself sourcing all the required materials on your own. Consult the [sourcing guide](https://theelims.github.io/SmartAssPlug/sourcing/) for more information.
 
 ### Does it integrate with XToys or Buttplug.io?
 
