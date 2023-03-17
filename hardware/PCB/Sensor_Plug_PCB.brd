@@ -1387,7 +1387,7 @@ Everything else you will find on https://aisler.net/help</description>
 <element name="LED1" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" package="LED_0603_SIDEVIEW" value="" x="11.3" y="1" locked="yes" smashed="yes" rot="R270">
 <attribute name="NAME" x="11.3" y="1.762" locked="yes" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
 </element>
-<element name="R4" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" package="R0603" value="2.0k" x="2.413" y="14.859" smashed="yes">
+<element name="R4" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" package="R0603" value="5.0k" x="2.413" y="14.859" smashed="yes">
 <attribute name="NAME" x="0.762" y="14.7101" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
 <attribute name="VALUE" x="4.064" y="16.3369" size="0.6096" layer="27" font="vector" ratio="20" align="top-center"/>
 </element>

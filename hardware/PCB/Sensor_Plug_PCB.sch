@@ -2753,7 +2753,7 @@ The TPS6303x devices operate over a free air temperature range of –40°C to 85
 <part name="IC6" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" deviceset="MCP73831" device="-DFN8" value="MCP73831-DFN8"/>
 <part name="R3" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" deviceset="R" device="-0603" value="1k"/>
 <part name="LED1" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" deviceset="LED" device="-0603-SIDEVIEW"/>
-<part name="R4" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" deviceset="R" device="-0603" value="2.0k"/>
+<part name="R4" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" deviceset="R" device="-0603" value="5.0k"/>
 <part name="GND21" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" deviceset="GND" device="" value="GND"/>
 <part name="C15" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" deviceset="C" device="-0805" value="10uF"/>
 <part name="GND22" library="Std Parts Library" library_urn="urn:adsk.wipprod:fs.file:vf.17mASCXCRkiwv_UU5McLmg" deviceset="GND" device="" value="GND"/>
@@ -2816,16 +2816,15 @@ The TPS6303x devices operate over a free air temperature range of –40°C to 85
 <text x="5.08" y="195.58" size="5.08" layer="97" font="custom" fontFamily="Arial Rounded MT Bold">User Interface</text>
 <wire x1="287.02" y1="109.22" x2="388.62" y2="109.22" width="0.8128" layer="97" style="longdash"/>
 <text x="139.7" y="195.58" size="5.08" layer="97" font="custom" fontFamily="Arial Rounded MT Bold">IMU</text>
-<text x="274.32" y="243.84" size="1.778" layer="97">3.3K  = 300mA</text>
-<text x="274.32" y="241.3" size="1.778" layer="97">2.0K  = 500mA</text>
-<text x="274.32" y="236.22" size="1.778" layer="97">1.0K  = 1000mA</text>
-<text x="274.32" y="238.76" size="1.778" layer="97">1.3K  = 750mA</text>
+<text x="274.32" y="238.76" size="1.778" layer="97">3.3K  = 300mA</text>
+<text x="274.32" y="236.22" size="1.778" layer="97">2.0K  = 500mA</text>
 <text x="325.12" y="218.44" size="1.27" layer="97">I2C Adress: 0x6C</text>
 <text x="332.74" y="137.16" size="1.27" layer="97">I2C Adress: 0x18</text>
 <wire x1="132.08" y1="109.22" x2="132.08" y2="203.2" width="0.8128" layer="97" style="longdash"/>
 <text x="292.1" y="101.6" size="5.08" layer="97" font="custom" fontFamily="Arial Rounded MT Bold">Vibration Motor</text>
 <text x="217.678" y="114.554" size="1.27" layer="97">I2C Adress: 0x6A</text>
 <text x="217.17" y="157.988" size="1.27" layer="97">I2C Adress: 0x1C</text>
+<text x="274.32" y="241.3" size="1.778" layer="97">5.0K  = 200mA</text>
 </plain>
 <instances>
 <instance part="IC1" gate="G$1" x="345.44" y="154.94" smashed="yes">
