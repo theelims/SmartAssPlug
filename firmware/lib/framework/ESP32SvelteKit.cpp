@@ -116,6 +116,7 @@ void ESP32SvelteKit::begin()
     MDNS.begin(_wifiSettingsService.getHostname().c_str());
     MDNS.setInstanceName(_appName);
     MDNS.addService("http", "tcp", 80);
+    MDNS.addService("ws", "tcp", 80);
     MDNS.addServiceTxt("http", "tcp", "Firmware Version", FIRMWARE_VERSION);
 
     Serial.printf("Running Firmware Version: %s\n", FIRMWARE_VERSION);

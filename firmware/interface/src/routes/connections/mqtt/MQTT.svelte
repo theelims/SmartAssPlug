@@ -165,7 +165,7 @@
 
 <SettingsCard collapsible={false}>
 	<MQTT slot="icon" class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
-	<span slot="title">MQTT</span>
+	<span slot="title">MQTT Server</span>
 	<div class="w-full overflow-x-auto">
 		{#await getMQTTStatus()}
 			<Spinner />
@@ -217,7 +217,7 @@
 
 	{#if !$page.data.features.security || $user.admin}
 		<Collapsible open={false} class="shadow-lg" on:closed={getMQTTSettings}>
-			<span slot="title">Change MQTT Settings</span>
+			<span slot="title">Change MQTT Server Settings</span>
 
 			<form on:submit|preventDefault={handleSubmitMQTT} novalidate bind:this={formField}>
 				<div class="grid w-full grid-cols-1 content-center gap-x-4 px-4 sm:grid-cols-2">

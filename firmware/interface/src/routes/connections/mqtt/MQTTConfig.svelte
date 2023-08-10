@@ -7,11 +7,11 @@
 	import { notifications } from '$lib/components/toasts/notifications';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import MQTT from '~icons/tabler/topology-star-3';
-	import Info from '~icons/tabler/info-circle';
 
 	type BrokerSettings = {
-		mqtt_path: string;
-		name: string;
+		mqtt_data_path: string;
+		mqtt_control_path: string;
+		mqtt_vibrate_path: string;
 		unique_id: string;
 	};
 
@@ -37,8 +37,9 @@
 
 	let formErrors = {
 		uid: false,
-		path: false,
-		name: false
+		datapath: false,
+		controlpath: false,
+		vibratepath: false
 	};
 
 	async function postBrokerSettings() {
@@ -74,19 +75,28 @@
 			formErrors.uid = false;
 		}
 
-		// Validate name
-		if (brokerSettings.name.length < 3 || brokerSettings.name.length > 32) {
+		// Validate MQTT Data Path
+		if (brokerSettings.mqtt_data_path.length > 128) {
 			valid = false;
-			formErrors.name = true;
+			formErrors.datapath = true;
 		} else {
-			formErrors.name = false;
+			formErrors.datapath = false;
 		}
-		// Validate MQTT Path
-		if (brokerSettings.mqtt_path.length > 64) {
+
+		// Validate MQTT Control Path
+		if (brokerSettings.mqtt_control_path.length > 128) {
 			valid = false;
-			formErrors.path = true;
+			formErrors.controlpath = true;
 		} else {
-			formErrors.path = false;
+			formErrors.controlpath = false;
+		}
+
+		// Validate MQTT Control Path
+		if (brokerSettings.mqtt_vibrate_path.length > 128) {
+			valid = false;
+			formErrors.vibratepath = true;
+		} else {
+			formErrors.vibratepath = false;
 		}
 
 		// Submit JSON to REST API
@@ -97,7 +107,7 @@
 	}
 </script>
 
-<SettingsCard collapsible={true} open={false}>
+<SettingsCard collapsible={false}>
 	<MQTT slot="icon" class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
 	<span slot="title">MQTT Broker Settings</span>
 	<div class="w-full overflow-x-auto">
@@ -110,13 +120,6 @@
 				bind:this={formField}
 				transition:slide|local={{ duration: 300, easing: cubicOut }}
 			>
-				<div class="alert alert-info my-2 shadow-lg">
-					<Info class="h-6 w-6 flex-shrink-0 stroke-current" />
-					<span
-						>The LED is controllable via MQTT with the demo project designed to work with Home
-						Assistant's auto discovery feature.</span
-					>
-				</div>
 				<div class="grid w-full grid-cols-1 content-center gap-x-4 px-4">
 					<div>
 						<label class="label" for="uid">
@@ -140,44 +143,65 @@
 						</label>
 					</div>
 					<div>
-						<label class="label" for="name">
-							<span class="label-text text-md">Name</span>
+						<label class="label" for="datatopic">
+							<span class="label-text text-md">Data Topic</span>
 						</label>
 						<input
 							type="text"
-							class="input input-bordered invalid:border-error w-full invalid:border-2 {formErrors.name
+							class="input input-bordered invalid:border-error w-full invalid:border-2 {formErrors.datapath
 								? 'border-error border-2'
 								: ''}"
-							bind:value={brokerSettings.name}
-							id="name"
-							min="3"
-							max="32"
+							bind:value={brokerSettings.mqtt_data_path}
+							id="datatopic"
+							min="0"
+							max="128"
 							required
 						/>
-						<label class="label" for="name">
-							<span class="label-text-alt text-error {formErrors.name ? '' : 'hidden'}"
-								>Name must be between 3 and 32 characters long</span
+						<label class="label" for="datatopic">
+							<span class="label-text-alt text-error {formErrors.datapath ? '' : 'hidden'}"
+								>MQTT topic is limited to 128 characters</span
 							>
 						</label>
 					</div>
 					<div>
-						<label class="label" for="path">
-							<span class="label-text text-md">MQTT Path</span>
+						<label class="label" for="controltopic">
+							<span class="label-text text-md">Control Topic</span>
 						</label>
 						<input
 							type="text"
-							class="input input-bordered invalid:border-error w-full invalid:border-2 {formErrors.path
+							class="input input-bordered invalid:border-error w-full invalid:border-2 {formErrors.controlpath
 								? 'border-error border-2'
 								: ''}"
-							bind:value={brokerSettings.mqtt_path}
-							id="path"
+							bind:value={brokerSettings.mqtt_control_path}
+							id="controltopic"
 							min="0"
-							max="64"
+							max="128"
 							required
 						/>
-						<label class="label" for="path">
-							<span class="label-text-alt text-error {formErrors.path ? '' : 'hidden'}"
-								>MQTT path is limited to 64 characters</span
+						<label class="label" for="controltopic">
+							<span class="label-text-alt text-error {formErrors.controlpath ? '' : 'hidden'}"
+								>MQTT topic is limited to 128 characters</span
+							>
+						</label>
+					</div>
+					<div>
+						<label class="label" for="vibratetopic">
+							<span class="label-text text-md">Vibrate Topic</span>
+						</label>
+						<input
+							type="text"
+							class="input input-bordered invalid:border-error w-full invalid:border-2 {formErrors.vibratepath
+								? 'border-error border-2'
+								: ''}"
+							bind:value={brokerSettings.mqtt_vibrate_path}
+							id="vibratetopic"
+							min="0"
+							max="128"
+							required
+						/>
+						<label class="label" for="vibratetopic">
+							<span class="label-text-alt text-error {formErrors.vibratepath ? '' : 'hidden'}"
+								>MQTT topic is limited to 128 characters</span
 							>
 						</label>
 					</div>

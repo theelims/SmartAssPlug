@@ -19,7 +19,7 @@
 		<Battery75 class="{$$props.class || ''} -rotate-90" />
 	{:else if soc > 30}
 		<Battery50 class="{$$props.class || ''} -rotate-90" />
-	{:else if soc > 5}
+	{:else if soc > 6}
 		<Battery25 class="{$$props.class || ''} -rotate-90" />
 	{:else}
 		<Battery0 class="{$$props.class || ''} text-error -rotate-90 animate-pulse" />

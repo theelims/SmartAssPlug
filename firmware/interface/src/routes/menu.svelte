@@ -19,13 +19,13 @@
 	import { user } from '$lib/stores/user';
 	import { createEventDispatcher } from 'svelte';
 
-	const appName = 'ESP32 SvelteKit';
+	const appName = 'SmartAss Plug';
 
 	const copyright = '2023 theelims';
 
 	const github = { href: 'https://github.com/' + $page.data.github, active: true };
 
-	const discord = { href: '.', active: false };
+	const discord = { href: 'https://discord.gg/hephqY2m8A', active: true };
 
 	type menuItem = {
 		title: string;
@@ -46,7 +46,7 @@
 
 	let menuItems = [
 		{
-			title: 'Demo App',
+			title: 'Settings',
 			icon: Control,
 			href: '/demo',
 			feature: true,
@@ -142,7 +142,7 @@
 	});
 </script>
 
-<div class="bg-base-200 text-base-content rounded-box flex h-full w-80 flex-col p-4">
+<div class="bg-base-200 text-base-content flex h-full w-80 flex-col p-4">
 	<!-- Sidebar content here -->
 	<a
 		href="/"

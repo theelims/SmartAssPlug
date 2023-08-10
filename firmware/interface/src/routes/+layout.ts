@@ -9,7 +9,7 @@ export const load = (async () => {
 	const item = await result.json();
 	return {
 		features: item,
-		title: 'ESP32-SvelteKit',
-		github: 'theelims/ESP32-sveltekit'
+		title: 'SmartAss Plug',
+		github: 'theelims/SmartAssPlug'
 	};
 }) satisfies LayoutLoad;
