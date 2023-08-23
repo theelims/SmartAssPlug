@@ -28,10 +28,8 @@ EdgingDataService::EdgingDataService(AsyncWebServer *server,
                                                                                              _mqttClient(mqttClient),
                                                                                              _edgingMqttSettingsService(edgingMqttSettingsService)
 {
-    _state.timestamp = 0;
-    _state.rawPressure = 1024.0;
-    _state.filteredPressure = 1024.0;
     _state.arousalValue = 0.0;
+    _state.stimulationValue = 0.0;
     _state.arousalState = NEUTRAL;
 
     // configure MQTT callback

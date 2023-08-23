@@ -14,6 +14,8 @@
 	import Copyright from '~icons/tabler/copyright';
 	import MQTT from '~icons/tabler/topology-star-3';
 	import NTP from '~icons/tabler/clock-check';
+	import Analyzer from '~icons/tabler/chart-sankey';
+	import Devices from '~icons/tabler/device-remote';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { user } from '$lib/stores/user';
@@ -52,6 +54,20 @@
 			feature: true,
 			active: false
 		},
+		{
+			title: 'Analyzer',
+			icon: Analyzer,
+			href: '/demo',
+			feature: true,
+			active: false
+		},
+		// {
+		// 	title: 'Devices',
+		// 	icon: Devices,
+		// 	href: '/demo',
+		// 	feature: true,
+		// 	active: false
+		// },
 		{
 			title: 'Connections',
 			icon: Remote,

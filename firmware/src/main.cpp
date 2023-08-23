@@ -20,6 +20,11 @@
 #include <BatteryMonitor.h>
 #include "Adafruit_MPRLS.h"
 #include <SimpleKalmanFilter.h>
+#include <CBOR.h>
+#include <CBOR_parsing.h>
+#include <CBOR_streams.h>
+
+namespace cbor = ::qindesign::cbor;
 
 #define colorSaturation 128
 
@@ -39,12 +44,16 @@ NeoPixelBus<NeoGrbFeature, NeoEsp32I2s0800KbpsMethod> logo(2, 0);
 #endif
 
 SimpleKalmanFilter pressureKalmanFilter(1, 1, 1.0);
-float rawPressure = 0.0;
-float filteredPressure = 0.0;
 TaskHandle_t sensorTaskHandle;
 
 AsyncWebServer server(80);
 ESP32SvelteKit esp32sveltekit(&server);
+
+AsyncWebSocket ws("/ws/rawData");
+
+constexpr size_t kBytesSize = 256;
+uint8_t bytes[kBytesSize]{0};
+cbor::BytesPrint bp{bytes, sizeof(bytes)};
 
 EdgingMqttSettingsService edgingMqttSettingsService =
     EdgingMqttSettingsService(&server, esp32sveltekit.getFS(), esp32sveltekit.getSecurityManager());
@@ -75,22 +84,69 @@ void sensorTask(void *parameter)
 {
     TickType_t xLastWakeTime;
     xLastWakeTime = xTaskGetTickCount();
+    // All pressures in Pa (1 Pa = 0.01 mbar) to stay in integer
+    int rawPressure = 0;
+    int filteredPressure = 0;
+    int dpdt = 0;
+    int d2pdt2 = 0;
+    int previousFilteredPressure = 0;
+    int previousDpDt = 0;
+    int i = 0;
     while (1)
     {
-        rawPressure = mpr.readPressure();
-        filteredPressure = pressureKalmanFilter.updateEstimate(rawPressure);
+        // Write next chunk of data
+        cbor::Writer cbor{bp};
+        bp.reset();
+        // cbor.writeTag(cbor::kSelfDescribeTag);
+        cbor.beginIndefiniteArray();
 
-        edgingDataService.update([&](EdgingData &data)
-                                 { 
-            data.timestamp = millis();
-            data.rawPressure = rawPressure;
-            data.filteredPressure = filteredPressure;
-            return StateUpdateResult::CHANGED; },
-                                 "sensor");
-        // ESP_LOGV("Sensor", "raw: %.2f, kalman %.2f", rawPressure, filteredPressure);
+        //
+        for (size_t i = 0; i < 6; i++)
+        {
+            // 40Hz Update rate
+            vTaskDelayUntil(&xLastWakeTime, 25 / portTICK_PERIOD_MS);
 
-        // 50Hz Update rate
-        vTaskDelayUntil(&xLastWakeTime, 100 / portTICK_PERIOD_MS);
+            cbor.beginArray(5);
+
+            // write timestamp
+            cbor.writeUnsignedInt(millis());
+
+            // read pressure and do math
+            rawPressure = (int)(mpr.readPressure() * 100);
+            cbor.writeInt(rawPressure);
+
+            filteredPressure = (int)pressureKalmanFilter.updateEstimate((float)rawPressure);
+            cbor.writeInt(filteredPressure);
+
+            dpdt = (filteredPressure - previousFilteredPressure) * 40;
+            cbor.writeInt(dpdt);
+
+            d2pdt2 = dpdt - previousDpDt;
+            cbor.writeInt(d2pdt2);
+
+            // Store current value for derivative calculus
+            previousDpDt = dpdt;
+            previousFilteredPressure = filteredPressure;
+            // ESP_LOGV("Sensor", "raw: %.2f, kalman %.2f", rawPressure, filteredPressure);
+        }
+
+        // end indefinite array
+        cbor.endIndefinite();
+
+        // Send data over websocket
+        size_t length = cbor.getWriteSize();
+        ws.binaryAll(reinterpret_cast<uint8_t *>(&bytes), length);
+
+        /*         Serial.print("CBOR: ");
+                for (size_t i = 0; i < length; ++i)
+                {
+                    if (bytes[i] < 0x10)
+                    {
+                        Serial.print('0');
+                    }
+                    Serial.print(bytes[i], HEX);
+                }
+                Serial.println(); */
     }
 }
 
@@ -124,6 +180,7 @@ void setup()
     esp32sveltekit.setMDNSAppName("SmartAss Plug");
     esp32sveltekit.begin();
     esp32sveltekit.getSleepService()->attachOnSleepCallback(prepareForShutDown);
+    server.addHandler(&ws);
 
     // start the MQTT broker settings service
     edgingMqttSettingsService.begin();

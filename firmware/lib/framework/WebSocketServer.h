@@ -140,6 +140,8 @@ protected:
             // when a client connects, we transmit it's id and the current payload
             transmitId(client);
             transmitData(client, WEB_SOCKET_ORIGIN);
+            client->ping();
+            ESP_LOGI("WebSocket Server", "ws[%s][%u] connect", server->url(), client->id());
         }
     }
 
@@ -248,6 +250,21 @@ protected:
                 }
             }
         }
+        else if (type == WS_EVT_DISCONNECT)
+        {
+            // client disconnected
+            ESP_LOGI("WebSocket Server", "ws[%s][%u] disconnect: %u", server->url(), client->id());
+        }
+        else if (type == WS_EVT_ERROR)
+        {
+            // error was received from the other end
+            ESP_LOGD("WebSocket Server", "ws[%s][%u] error(%u): %s", server->url(), client->id(), *((uint16_t *)arg), (char *)data);
+        }
+        else if (type == WS_EVT_PONG)
+        {
+            // pong message was received (in response to a ping request maybe)
+            // ESP_LOGV("WebSocket Server", "ws[%s][%u] pong[%u]: %s", server->url(), client->id(), len, (len) ? (char *)data : "");
+        }
     }
 
 private:
@@ -314,6 +331,7 @@ protected:
     {
         WebSocketServerConnector<T>::_webSocket.cleanupClients();
         // ESP_LOGV("WebSocket Server", "Cleanup WS Clients");
+        WebSocketServerConnector<T>::_webSocket.pingAll();
     }
 
     static void timerCallbackStatic(TimerHandle_t xTimer)

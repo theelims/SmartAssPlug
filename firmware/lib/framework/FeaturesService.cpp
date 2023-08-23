@@ -63,6 +63,11 @@ void FeaturesService::features(AsyncWebServerRequest *request)
 #else
     root["battery"] = false;
 #endif
+#if FT_ENABLED(FT_ANALYTICS)
+    root["analytics"] = true;
+#else
+    root["analytics"] = false;
+#endif
     root["firmware_version"] = FIRMWARE_VERSION;
     response->setLength();
     request->send(response);

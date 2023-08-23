@@ -48,6 +48,9 @@ ESP32SvelteKit::ESP32SvelteKit(AsyncWebServer *server) : _featureService(server)
 #if FT_ENABLED(FT_BATTERY)
                                                          _batteryService(&_notificationEvents),
 #endif
+#if FT_ENABLED(FT_ANALYTICS)
+                                                         _analyticsService(&_notificationEvents),
+#endif
                                                          _restartService(server, &_securitySettingsService),
                                                          _factoryResetService(server, &ESPFS, &_securitySettingsService),
                                                          _systemStatus(server, &_securitySettingsService)

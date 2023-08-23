@@ -14,7 +14,7 @@
  **/
 
 #include <EdgingMqttSettingsService.h>
-
+#include <queue>
 #include <MqttPubSub.h>
 #include <WebSocketServer.h>
 
@@ -38,19 +38,16 @@ static const char *arousalStateToStr[] =
 class EdgingData
 {
 public:
-    int timestamp;
-    float rawPressure;
-    float filteredPressure;
     float arousalValue;
+    float stimulationValue;
     ArousalState arousalState;
 
     static void read(EdgingData &settings, JsonObject &root)
     {
-        root["timestamp"] = settings.timestamp;
-        root["raw_pres"] = settings.rawPressure;
-        root["filtered_pres"] = settings.filteredPressure;
+        root["timestamp"] = millis();
         root["arousal_value"] = settings.arousalValue;
         root["arousal_state"] = arousalStateToStr[settings.arousalState];
+        root["simulation_value"] = settings.stimulationValue;
     }
 
     // WS and MQTT are read only
