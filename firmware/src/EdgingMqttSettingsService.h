@@ -32,7 +32,6 @@ public:
     {
         root["mqtt_data_path"] = settings.mqttDataPath;
         root["mqtt_control_path"] = settings.mqttControlPath;
-        root["mqtt_vibrate_path"] = settings.mqttVibratePath;
         root["unique_id"] = settings.uniqueId;
     }
 
@@ -40,7 +39,6 @@ public:
     {
         settings.mqttDataPath = root["mqtt_data_path"] | SettingValue::format("smartassplug/#{unique_id}/data");
         settings.mqttControlPath = root["mqtt_control_path"] | SettingValue::format("smartassplug/#{unique_id}/control");
-        settings.mqttVibratePath = root["mqtt_vibrate_path"] | SettingValue::format("smartassplug/#{unique_id}/vibrate");
         settings.uniqueId = root["unique_id"] | SettingValue::format("light-#{unique_id}");
         return StateUpdateResult::CHANGED;
     }

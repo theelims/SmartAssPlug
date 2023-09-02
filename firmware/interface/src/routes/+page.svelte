@@ -4,12 +4,13 @@
 	import { user } from '$lib/stores/user';
 	import { page } from '$app/stores';
 	import { telemetry } from '$lib/stores/telemetry';
+	import { analytics } from '$lib/stores/analytics';
 	import { Chart, registerables } from 'chart.js';
 	import * as LuxonAdapter from 'chartjs-adapter-luxon';
 	import ChartStreaming from '@robloche/chartjs-plugin-streaming';
 	import { onMount, onDestroy } from 'svelte';
 	import Download from '~icons/tabler/download';
-	import Start from '~icons/tabler/player-record';
+	import Start from '~icons/tabler/player-play';
 	import Stop from '~icons/tabler/player-stop';
 	import { decode } from 'cbor-x/decode';
 
@@ -19,94 +20,124 @@
 	Chart.register(LuxonAdapter);
 	Chart.register(ChartStreaming);
 
+	type ControlState = {
+		active: boolean;
+		session_type: number;
+		value: number;
+		vibrate: number;
+	};
+
 	let pressureChartElement: HTMLCanvasElement;
 	let pressureChart: Chart;
 
 	let arousalChartElement: HTMLCanvasElement;
 	let arousalChart: Chart;
 
-	let edgingSocket: WebSocket;
-	let reconnectWSIntervalId: number = 0;
-	let unresponsiveTimeout: number;
+	let dataSocket: WebSocket;
+	let controlSocket: WebSocket;
+	let unresponsiveTimeoutControl: number;
+	let unresponsiveTimeoutData: number;
 	let timeSync: number = 0;
+	let lastPressure: number = 1024;
+	let lastdpdt: number = 0;
+	let controlState: ControlState = {
+		active: false,
+		session_type: 0,
+		value: 0,
+		vibrate: 0
+	};
 
-	function openSocket() {
-		edgingSocket = new WebSocket('ws://' + $page.url.host + '/ws/rawData');
-		edgingSocket.binaryType = 'arraybuffer';
-		console.log(`trying to connect to: ${edgingSocket.url}`);
+	function openDataSocket() {
+		dataSocket = new WebSocket('ws://' + $page.url.host + '/ws/rawData');
+		dataSocket.binaryType = 'arraybuffer';
+		console.log(`trying to connect to: ${dataSocket.url}`);
 
-		edgingSocket.onopen = () => {
-			console.log(`connection open to: ${edgingSocket.url}`);
-
-			timeSync = 0;
-			clearInterval(reconnectWSIntervalId);
-			reconnectWSIntervalId = 0;
-
-			edgingSocket.onclose = () => {
-				console.log(`connection closed to: ${edgingSocket.url}`);
-				reconnect();
-			};
-
-			edgingSocket.onmessage = (event) => {
-				// Reset a timer to detect unresponsiveness
-				clearTimeout(unresponsiveTimeout);
-				unresponsiveTimeout = setTimeout(() => {
-					console.log('Server is unresponsive');
-					reconnect();
-				}, 1000); // Detect unresponsiveness after 1 seconds
-
-				const data = decode(new Uint8Array(event.data));
-
-				if (timeSync == 0) {
-					timeSync = Date.now() - data[0][0];
-				}
-
-				for (let i = 0; i < data.length; i++) {
-					pressureChart.data.datasets[0].data.push({
-						x: timeSync + data[i][0],
-						y: data[i][1] * 0.01
-					});
-					pressureChart.data.datasets[1].data.push({
-						x: timeSync + data[i][0],
-						y: data[i][2] * 0.01
-					});
-					pressureChart.data.datasets[2].data.push({
-						x: timeSync + data[i][0],
-						y: data[i][3] * 0.01
-					});
-					pressureChart.data.datasets[3].data.push({
-						x: timeSync + data[i][0],
-						y: data[i][4] * 0.01
-					});
-				}
-				/*
-					arousalChart.data.datasets[0].data.push({
-						x: timeSync + data.payload.timestamp.slice(-1)[0],
-						y: data.payload.arousal_state
-					});
-					arousalChart.data.datasets[1].data.push({
-						x: timeSync + data.payload.timestamp.slice(-1)[0],
-						y: data.payload.arousal_value + 50
-					}); */
-			};
+		dataSocket.onopen = () => {
+			console.log(`connection open to: ${dataSocket.url}`);
 		};
 
-		edgingSocket.onerror = () => {
-			console.log(`connection error with: ${edgingSocket.url}`);
-			reconnect();
+		dataSocket.onclose = () => {
+			console.log(`connection closed to: ${dataSocket.url}`);
+		};
+
+		dataSocket.onmessage = (event) => {
+			// Reset a timer to detect unresponsiveness
+			clearTimeout(unresponsiveTimeoutData);
+			unresponsiveTimeoutData = setTimeout(() => {
+				console.log('Server is unresponsive');
+				dataSocket.close();
+			}, 1000); // Detect unresponsiveness after 1 seconds
+
+			const data = decode(new Uint8Array(event.data));
+
+			if (timeSync == 0) {
+				timeSync = Date.now() - data[0][0];
+			}
+
+			for (let i = 0; i < data.length; i++) {
+				let dpdt = (data[i][2] * 0.01 - lastPressure) * 40;
+				let d2pdt2 = lastdpdt - dpdt;
+				pressureChart.data.datasets[0].data.push({
+					x: timeSync + data[i][0],
+					y: data[i][1] * 0.01
+				});
+				pressureChart.data.datasets[1].data.push({
+					x: timeSync + data[i][0],
+					y: data[i][2] * 0.01
+				});
+				pressureChart.data.datasets[2].data.push({
+					x: timeSync + data[i][0],
+					y: dpdt
+				});
+				pressureChart.data.datasets[3].data.push({
+					x: timeSync + data[i][0],
+					y: d2pdt2
+				});
+				lastPressure = data[i][2] * 0.01;
+				lastdpdt = dpdt;
+			}
+			/*
+                arousalChart.data.datasets[0].data.push({
+                    x: timeSync + data.payload.timestamp.slice(-1)[0],
+                    y: data.payload.arousal_state
+                });
+                arousalChart.data.datasets[1].data.push({
+                    x: timeSync + data.payload.timestamp.slice(-1)[0],
+                    y: data.payload.arousal_value + 50
+                }); */
+		};
+
+		dataSocket.onerror = () => {
+			console.log(`connection error with: ${dataSocket.url}`);
 		};
 	}
 
-	function reconnect() {
-		console.log('WS reconnect triggered');
-		if (reconnectWSIntervalId === 0) {
-			edgingSocket.close;
-			reconnectWSIntervalId = setInterval(openSocket, 2000);
-			console.log('WS reconnect Timer ID: ' + reconnectWSIntervalId);
-		}
+	function openControlSocket() {
+		controlSocket = new WebSocket('ws://' + $page.url.host + '/ws/control');
+		console.log(`trying to connect to: ${controlSocket.url}`);
+
+		controlSocket.onopen = () => {
+			console.log(`connection open to: ${controlSocket.url}`);
+		};
+
+		controlSocket.onclose = () => {
+			console.log(`connection closed to: ${controlSocket.url}`);
+		};
+
+		controlSocket.onmessage = (event) => {
+			controlState = JSON.parse(event.data);
+			console.log(controlState);
+		};
+
+		controlSocket.onerror = () => {
+			console.log(`connection error with: ${controlSocket.url}`);
+		};
 	}
 
-	onDestroy(() => edgingSocket.close());
+	onDestroy(() => {
+		dataSocket.close();
+		controlSocket.close();
+	});
 
 	function daisyColor(name: string, opacity: number = 100) {
 		const color = getComputedStyle(document.documentElement).getPropertyValue(name);
@@ -114,7 +145,8 @@
 	}
 
 	onMount(() => {
-		openSocket();
+		openDataSocket();
+		openControlSocket();
 		pressureChart = new Chart(pressureChartElement, {
 			type: 'line',
 			data: {
@@ -382,9 +414,8 @@
 		pressureChart.data.datasets[0].data.forEach((point, index) => {
 			csv += `${point.x},${point.y},`; // Add each data point as a CSV row
 			csv += `${pressureChart.data.datasets[1].data[index].y},`;
-			csv += `${pressureChart.data.datasets[1].data[index].y},`;
-			csv += `${pressureChart.data.datasets[1].data[index].y},`;
-			csv += `${pressureChart.data.datasets[1].data[index].y}\n`;
+			csv += `${pressureChart.data.datasets[2].data[index].y},`;
+			csv += `${pressureChart.data.datasets[3].data[index].y}\n`;
 		});
 
 		return csv;
@@ -415,6 +446,14 @@
 		document.body.removeChild(downloadLink);
 		URL.revokeObjectURL(blobURL);
 	}
+	function controlSession() {
+		if (controlState.active === true) {
+			controlState.active = false;
+		} else {
+			controlState.active = true;
+		}
+		controlSocket.send(JSON.stringify(controlState));
+	}
 </script>
 
 <div class="card bg-base-200 shadow-md shadow-primary/50 mt-3 mb-1.5 mx-auto w-11/12">
@@ -428,10 +467,82 @@
 	</div>
 </div>
 <div class="card bg-base-200 shadow-md shadow-primary/50 my-1.5 mx-auto w-11/12">
-	<div class="m-4 flex flex-wrap gap-2">
-		<div class="grow"></div>
-		<button class="btn btn-primary inline-flex items-center" on:click={downloadData}
-			><Download class="mr-2 h-5 w-5" /><span>Download CSV</span></button
-		>
+	<div class="mt-4 mx-4">
+		{#if true}
+			<input
+				type="range"
+				min="0"
+				max="100"
+				bind:value={controlState.value}
+				on:change={() => {
+					controlSocket.send(JSON.stringify(controlState));
+				}}
+				class="range range-primary range-xs"
+			/>
+			<label class="label mt-0 pt-0">
+				<span class="label-text">Stimulation</span>
+				<span class="label-text-alt">{controlState.value} %</span>
+			</label>
+		{/if}
+	</div>
+	<div class="mt-4 mx-4">
+		{#if true}
+			<input
+				type="range"
+				min="0"
+				max="100"
+				bind:value={controlState.vibrate}
+				on:change={() => {
+					controlSocket.send(JSON.stringify(controlState));
+				}}
+				class="range range-primary range-xs"
+			/>
+			<label class="label mt-0 pt-0">
+				<span class="label-text">Vibrate</span>
+				<span class="label-text-alt">{controlState.vibrate} %</span>
+			</label>
+		{/if}
+	</div>
+
+	<div class="m-4 flex flex-wrap gap-6 justify-between">
+		<div class="flex flex-nowrap justify-start gap-6">
+			<button class="btn btn-primary inline-flex items-center w-32" on:click={controlSession}>
+				{#if controlState.active === false}
+					<Start class="mr-2 h-5 w-5" /><span>Start</span>
+				{:else}
+					<Stop class="mr-2 h-5 w-5" /><span>Stop</span>
+				{/if}
+			</button>
+			<select class="select select-primary w-44">
+				<option>Simple Classifier</option>
+				<option>Onwrikbaar</option>
+				<option>Nogasm</option>
+				<option>AI Training</option>
+			</select>
+		</div>
+
+		<div class="flex flex-nowrap justify-end">
+			{#if controlState.active === true}
+				<div class="max-h-min">
+					<progress
+						class="progress progress-primary w-min"
+						value={$analytics.fs_percentage[$analytics.fs_percentage.length - 1]}
+						max="100"
+					></progress>
+					<label class="label mt-0 pt-0">
+						<span class="label-text">Recording</span>
+						<span class="label-text-alt"
+							>{$analytics.fs_percentage[$analytics.fs_percentage.length - 1].toFixed(0)} %</span
+						>
+					</label>
+				</div>
+			{:else}
+				<a
+					class="btn btn-primary inline-flex items-center"
+					href={'http://' + $page.url.host + '/rawdata/datalog.dat'}
+					download><Download class="mr-2 h-5 w-5" /><span>Download</span></a
+				>
+			{/if}
+		</div>
 	</div>
 </div>

@@ -7,6 +7,7 @@ let analytics_data = {
 	max_alloc_heap: <number[]>[],
 	fs_used: <number[]>[],
 	fs_total: <number[]>[],
+	fs_percentage: <number[]>[],
 	core_temp: <number[]>[]
 };
 
@@ -25,6 +26,10 @@ function createAnalytics() {
 				max_alloc_heap: [...analytics_data.max_alloc_heap, content.max_alloc_heap],
 				fs_used: [...analytics_data.fs_used, content.fs_used],
 				fs_total: [...analytics_data.fs_total, content.fs_total],
+				fs_percentage: [
+					...analytics_data.fs_percentage,
+					(content.fs_used * 100) / content.fs_total
+				],
 				core_temp: [...analytics_data.core_temp, content.core_temp]
 			}));
 		}

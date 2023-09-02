@@ -174,10 +174,7 @@ private:
     {
         DynamicJsonDocument jsonDocument = DynamicJsonDocument(WebSocketServerConnector<T>::_bufferSize);
         JsonObject root = jsonDocument.to<JsonObject>();
-        root["type"] = "payload";
-        root["origin_id"] = originId;
-        JsonObject payload = root.createNestedObject("payload");
-        WebSocketServerConnector<T>::_statefulService->read(payload, _stateReader);
+        WebSocketServerConnector<T>::_statefulService->read(root, _stateReader);
 
         size_t len = measureJson(jsonDocument);
         AsyncWebSocketMessageBuffer *buffer = WebSocketServerConnector<T>::_webSocket.makeBuffer(len);

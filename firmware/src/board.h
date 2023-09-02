@@ -42,3 +42,4 @@
 
 #define BATTERY_UPDATE_INTERVAL 2000
 #define LOW_BATTERY_SHUT_OFF_SOC 4 // We can alert at anywhere between 1% - 32%:
+#define VBUS 19

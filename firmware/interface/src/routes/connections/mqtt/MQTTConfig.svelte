@@ -11,7 +11,6 @@
 	type BrokerSettings = {
 		mqtt_data_path: string;
 		mqtt_control_path: string;
-		mqtt_vibrate_path: string;
 		unique_id: string;
 	};
 
@@ -38,8 +37,7 @@
 	let formErrors = {
 		uid: false,
 		datapath: false,
-		controlpath: false,
-		vibratepath: false
+		controlpath: false
 	};
 
 	async function postBrokerSettings() {
@@ -89,14 +87,6 @@
 			formErrors.controlpath = true;
 		} else {
 			formErrors.controlpath = false;
-		}
-
-		// Validate MQTT Control Path
-		if (brokerSettings.mqtt_vibrate_path.length > 128) {
-			valid = false;
-			formErrors.vibratepath = true;
-		} else {
-			formErrors.vibratepath = false;
 		}
 
 		// Submit JSON to REST API
@@ -180,27 +170,6 @@
 						/>
 						<label class="label" for="controltopic">
 							<span class="label-text-alt text-error {formErrors.controlpath ? '' : 'hidden'}"
-								>MQTT topic is limited to 128 characters</span
-							>
-						</label>
-					</div>
-					<div>
-						<label class="label" for="vibratetopic">
-							<span class="label-text text-md">Vibrate Topic</span>
-						</label>
-						<input
-							type="text"
-							class="input input-bordered invalid:border-error w-full invalid:border-2 {formErrors.vibratepath
-								? 'border-error border-2'
-								: ''}"
-							bind:value={brokerSettings.mqtt_vibrate_path}
-							id="vibratetopic"
-							min="0"
-							max="128"
-							required
-						/>
-						<label class="label" for="vibratetopic">
-							<span class="label-text-alt text-error {formErrors.vibratepath ? '' : 'hidden'}"
 								>MQTT topic is limited to 128 characters</span
 							>
 						</label>
