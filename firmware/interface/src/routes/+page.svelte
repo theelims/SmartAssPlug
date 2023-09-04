@@ -35,7 +35,6 @@
 
 	let dataSocket: WebSocket;
 	let controlSocket: WebSocket;
-	let unresponsiveTimeoutControl: number;
 	let unresponsiveTimeoutData: number;
 	let timeSync: number = 0;
 	let lastPressure: number = 1024;

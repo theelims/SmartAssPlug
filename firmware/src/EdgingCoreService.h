@@ -15,7 +15,6 @@
 
 #include <ESP32SvelteKit.h>
 #include <EdgingMqttSettingsService.h>
-#include <EdgingDataService.h>
 #include <NeoPixelBus.h>
 #include <board.h>
 #include <BatteryMonitor.h>
@@ -26,6 +25,8 @@
 #include <CBOR_streams.h>
 #include <MqttPubSub.h>
 #include <WebSocketServer.h>
+#include <EdgingDataService.h>
+#include <DataLogging.h>
 
 #define EDGING_CONTROL_SOCKET_PATH "/ws/control"
 #define EDGING_RAW_DATA_SOCKET_PATH "/ws/rawData"
@@ -48,6 +49,13 @@ enum SessionType
     NOGASM,
     TRAINING
 };
+
+static const char *sessionTypeToStr[] =
+    {
+        "Classifier",
+        "Onwrikbaar",
+        "Nogasm",
+        "Training"};
 
 class EdgingCore
 {
@@ -100,8 +108,7 @@ private:
     AsyncMqttClient *_mqttClient;
     EdgingMqttSettingsService _edgingMqttSettingsService;
     EdgingDataService _edgingDataService;
-
-    bool storeRawDataInFile(unsigned int rawPressure, unsigned int smoothPressure);
+    DataLog _dataLog;
 
     void registerConfig();
     void onConfigUpdated();
@@ -111,16 +118,5 @@ private:
     TaskHandle_t coreTaskHandle;
 
     static void _loopImpl(void *_this) { static_cast<EdgingCoreService *>(_this)->_loop(); }
-
-    /**************************************************************************************
-     * @brief main loop function
-     * read sensor data
-     * smooth sensor data
-     * send sensor raw data via websocket
-     * record CBOR logfile
-     * feed sensor data into edging algorithm
-     * send edging data through stateful service
-     *
-     **************************************************************************************/
     void _loop();
 };

@@ -26,9 +26,6 @@ RgbColor neutral(0, colorSaturation, 0);               /* green */
 uint8_t rawDataWSBytes[CBORS_DEFAULT_ARRAY_SIZE]{0};
 cbor::BytesPrint rawDataWSPrint{rawDataWSBytes, sizeof(rawDataWSBytes)};
 
-uint8_t rawDataFileBytes[CBORS_DEFAULT_ARRAY_SIZE / 2]{0};
-cbor::BytesPrint rawDataFilePrint{rawDataFileBytes, sizeof(rawDataFileBytes)};
-
 #ifdef ADAFRUIT
 Adafruit_MPRLS mpr = Adafruit_MPRLS();
 #else
@@ -39,26 +36,8 @@ SimpleKalmanFilter pressureKalmanFilter = SimpleKalmanFilter(1, 1, 1.0);
 
 NeoPixelBus<NeoGrbFeature, NeoEsp32I2s0800KbpsMethod> logo = NeoPixelBus<NeoGrbFeature, NeoEsp32I2s0800KbpsMethod>(2, NEOPIXEL);
 
-File logFile;
-unsigned int logFileStart = 0;
-unsigned int timeOffset = 0;
-
 AsyncWebSocket ws = AsyncWebSocket(EDGING_RAW_DATA_SOCKET_PATH);
 // TODO: WS-Callback and close unresponsive clients
-
-void printCBOR(uint8_t *message, size_t len)
-{
-    Serial.print("CBOR: ");
-    for (size_t i = 0; i < len; ++i)
-    {
-        if (message[i] < 0x10)
-        {
-            Serial.print('0');
-        }
-        Serial.print(message[i], HEX);
-    }
-    Serial.println();
-}
 
 EdgingCoreService::EdgingCoreService(ESP32SvelteKit *esp32sveltekit) : _esp32sveltekit(esp32sveltekit),
                                                                        _server(esp32sveltekit->getServer()),
@@ -77,16 +56,14 @@ EdgingCoreService::EdgingCoreService(ESP32SvelteKit *esp32sveltekit) : _esp32sve
                                                                        _edgingDataService(esp32sveltekit->getServer(),
                                                                                           esp32sveltekit->getSecurityManager(),
                                                                                           esp32sveltekit->getMqttClient(),
-                                                                                          &_edgingMqttSettingsService)
+                                                                                          &_edgingMqttSettingsService),
+                                                                       _dataLog(esp32sveltekit->getServer())
 {
     _state.sessionActive = false;
     _state.sessionType = CLASSIFIER;
 
     // add raw data websocket
     _server->addHandler(&ws);
-
-    // serve rawdata logfile from file system
-    _server->serveStatic("/rawdata/datalog.dat", ESPFS, "/rawdata/datalog.dat");
 
     // configure MQTT callback
     _mqttClient->onConnect(std::bind(&EdgingCoreService::registerConfig, this));
@@ -126,7 +103,7 @@ void EdgingCoreService::begin()
         _loopImpl,            /* Task function. */
         "coreEdgingTask",     /* name of task. */
         8192,                 /* Stack size of task */
-        NULL,                 /* parameter of the task */
+        this,                 /* parameter of the task */
         tskIDLE_PRIORITY + 2, /* priority of the task */
         &coreTaskHandle,      /* Task handle to keep track of created task */
         1);                   /* pin task to core 1 */
@@ -135,31 +112,13 @@ void EdgingCoreService::begin()
 void EdgingCoreService::onConfigUpdated()
 {
     // Start / Stop recording session
-
-    // Write to a file
-    // TODO: Mutex
-    if (!logFile && _state.sessionActive)
+    if (_state.sessionActive)
     {
-        logFile = _esp32sveltekit->getFS()->open("/rawdata/datalog.dat", "w", true);
-        cbor::Writer rawDataChunk{rawDataFilePrint};
-        rawDataFilePrint.reset();
-        // TODO: Add file header and context
-        rawDataChunk.beginIndefiniteArray();
-        size_t length = rawDataChunk.getWriteSize();
-        logFile.write(reinterpret_cast<uint8_t *>(&rawDataFileBytes), length);
-        ESP_LOGI(ecTAG, "Start writing datalog file");
-        logFileStart = timeOffset = millis();
+        _dataLog.startLogFile("Test");
     }
-
-    if (logFile && !_state.sessionActive)
+    else
     {
-        cbor::Writer rawDataChunk{rawDataFilePrint};
-        rawDataFilePrint.reset();
-        rawDataChunk.endIndefinite();
-        size_t length = rawDataChunk.getWriteSize();
-        logFile.write(reinterpret_cast<uint8_t *>(&rawDataFileBytes), length);
-        logFile.close();
-        ESP_LOGI(ecTAG, "Closed datalog file: %d bytes written, %d seconds recorded", logFile.size(), (millis() - logFileStart) / 1000);
+        _dataLog.stopLogFile();
     }
 }
 
@@ -176,42 +135,6 @@ void EdgingCoreService::registerConfig()
                                     { pubTopic = settings.mqttControlPath; });
 
     _mqttPubSub.configureTopics(pubTopic, "");
-}
-
-bool EdgingCoreService::storeRawDataInFile(unsigned int rawPressure, unsigned int smoothPressure)
-{
-    if (logFile)
-    {
-        // TODO: Mutex
-        cbor::Writer rawDataChunk{rawDataFilePrint};
-        rawDataFilePrint.reset();
-
-        // check for available space and terminate file if necessary
-        if ((ESPFS.totalBytes() - ESPFS.usedBytes()) < 1024)
-        {
-            rawDataChunk.endIndefinite();
-            String errorMessage = "File System Out of Memory";
-            rawDataChunk.beginText(errorMessage.length());
-            rawDataChunk.writeBytes(reinterpret_cast<const uint8_t *>(errorMessage.c_str()), errorMessage.length());
-            size_t length = rawDataChunk.getWriteSize();
-            logFile.write(reinterpret_cast<uint8_t *>(&rawDataFileBytes), length);
-            ESP_LOGD(ecTAG, "Filesystem out of memory: closed datalog file. %d bytes written, %d seconds recorded", logFile.size(), (millis() - logFileStart) / 1000);
-            logFile.close();
-            return false;
-        }
-
-        // TODO: write data in bigger chunks. Maybe in a separate thread with a queue?
-        rawDataChunk.beginArray(3);
-        rawDataChunk.writeUnsignedInt(millis() - timeOffset);
-        rawDataChunk.writeUnsignedInt(rawPressure);
-        rawDataChunk.writeUnsignedInt(smoothPressure);
-
-        size_t length = rawDataChunk.getWriteSize();
-        logFile.write(reinterpret_cast<uint8_t *>(&rawDataFileBytes), length);
-
-        return true;
-    }
-    return false;
 }
 
 /**************************************************************************************
@@ -231,12 +154,14 @@ void EdgingCoreService::_loop()
     // All pressures in Pa (1 Pa = 0.01 mbar) to stay in integer
     unsigned int rawPressure = 0;
     unsigned int filteredPressure = 0;
+    unsigned int timeStamp = 0;
     int i = 0;
     while (1)
     {
         // Write next chunk of data
         cbor::Writer cborWS{rawDataWSPrint};
         rawDataWSPrint.reset();
+        cborWS.resetWriteSize();
         cborWS.beginIndefiniteArray();
 
         for (size_t i = 0; i < WS_PACKET_AGGREGATION_ARRAY; i++)
@@ -247,7 +172,8 @@ void EdgingCoreService::_loop()
             cborWS.beginArray(3);
 
             // write timestamp
-            cborWS.writeUnsignedInt(millis());
+            timeStamp = millis();
+            cborWS.writeUnsignedInt(timeStamp);
 
             // read pressure and do math
             rawPressure = (unsigned int)(mpr.readPressure() * 100);
@@ -256,7 +182,7 @@ void EdgingCoreService::_loop()
             filteredPressure = (unsigned int)pressureKalmanFilter.updateEstimate((float)rawPressure);
             cborWS.writeUnsignedInt(filteredPressure);
 
-            storeRawDataInFile(rawPressure, filteredPressure);
+            _dataLog.logRawData(timeStamp, rawPressure, filteredPressure, NEUTRAL);
 
             // ESP_LOGV(ecTAG, "raw: %.2f, kalman %.2f", rawPressure, filteredPressure);
         }
