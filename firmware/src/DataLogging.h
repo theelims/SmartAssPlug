@@ -87,7 +87,6 @@ public:
         {
             // Notify logging task to stop operation and delete itself
             boolean success = xSemaphoreTake(stopSemaphore, 0);
-            ESP_LOGI(dlTAG, "Stop writing datalog file: %d", success);
         }
     }
 

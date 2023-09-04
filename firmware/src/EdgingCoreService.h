@@ -27,6 +27,7 @@
 #include <WebSocketServer.h>
 #include <EdgingDataService.h>
 #include <DataLogging.h>
+#include <Vibrator.h>
 
 #define EDGING_CONTROL_SOCKET_PATH "/ws/control"
 #define EDGING_RAW_DATA_SOCKET_PATH "/ws/rawData"
@@ -103,12 +104,24 @@ public:
 private:
     ESP32SvelteKit *_esp32sveltekit;
     AsyncWebServer *_server;
+    AsyncWebSocket ws = AsyncWebSocket(EDGING_RAW_DATA_SOCKET_PATH);
     MqttPubSub<EdgingCore> _mqttPubSub;
     WebSocketServer<EdgingCore> _webSocketServer;
     AsyncMqttClient *_mqttClient;
     EdgingMqttSettingsService _edgingMqttSettingsService;
     EdgingDataService _edgingDataService;
     DataLog _dataLog;
+    uint8_t rawDataWSBytes[CBORS_DEFAULT_ARRAY_SIZE]{0};
+    cbor::BytesPrint rawDataWSPrint{rawDataWSBytes, sizeof(rawDataWSBytes)};
+    Vibrator _vibrator;
+
+#ifdef ADAFRUIT
+    Adafruit_MPRLS mpr = Adafruit_MPRLS();
+#else
+    Adafruit_MPRLS mpr = Adafruit_MPRLS(RST_PIN, EOC_PIN, 0, 25, 10, 90, PSI_to_HPA);
+#endif
+
+    SimpleKalmanFilter pressureKalmanFilter = SimpleKalmanFilter(1, 1, 1.0);
 
     void registerConfig();
     void onConfigUpdated();

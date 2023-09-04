@@ -23,21 +23,7 @@ RgbColor stdby(colorSaturation);                       /* white */
 RgbColor off(0);                                       /* black */
 RgbColor neutral(0, colorSaturation, 0);               /* green */
 
-uint8_t rawDataWSBytes[CBORS_DEFAULT_ARRAY_SIZE]{0};
-cbor::BytesPrint rawDataWSPrint{rawDataWSBytes, sizeof(rawDataWSBytes)};
-
-#ifdef ADAFRUIT
-Adafruit_MPRLS mpr = Adafruit_MPRLS();
-#else
-Adafruit_MPRLS mpr = Adafruit_MPRLS(RST_PIN, EOC_PIN, 0, 25, 10, 90, PSI_to_HPA);
-#endif
-
-SimpleKalmanFilter pressureKalmanFilter = SimpleKalmanFilter(1, 1, 1.0);
-
 NeoPixelBus<NeoGrbFeature, NeoEsp32I2s0800KbpsMethod> logo = NeoPixelBus<NeoGrbFeature, NeoEsp32I2s0800KbpsMethod>(2, NEOPIXEL);
-
-AsyncWebSocket ws = AsyncWebSocket(EDGING_RAW_DATA_SOCKET_PATH);
-// TODO: WS-Callback and close unresponsive clients
 
 EdgingCoreService::EdgingCoreService(ESP32SvelteKit *esp32sveltekit) : _esp32sveltekit(esp32sveltekit),
                                                                        _server(esp32sveltekit->getServer()),
@@ -120,6 +106,9 @@ void EdgingCoreService::onConfigUpdated()
     {
         _dataLog.stopLogFile();
     }
+
+    // Update Vibrator
+    _vibrator.vibratorPercentage(_state.vibrationStrength);
 }
 
 void EdgingCoreService::registerConfig()
