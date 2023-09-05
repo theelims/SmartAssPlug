@@ -69,6 +69,21 @@ void FeaturesService::features(AsyncWebServerRequest *request)
     root["analytics"] = false;
 #endif
     root["firmware_version"] = FIRMWARE_VERSION;
+
+    // Iterate over user features
+    for (auto &element : userFeatures)
+    {
+        root[element.feature.c_str()] = element.enabled;
+    }
     response->setLength();
     request->send(response);
+}
+
+void FeaturesService::addFeature(String feature, bool enabled)
+{
+    UserFeature newFeature;
+    newFeature.feature = feature;
+    newFeature.enabled = enabled;
+
+    userFeatures.push_back(newFeature);
 }

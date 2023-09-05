@@ -144,6 +144,11 @@ public:
     }
 #endif
 
+    FeaturesService *getFeatureService()
+    {
+        return &_featureService;
+    }
+
     void factoryReset()
     {
         _factoryResetService.factoryReset();

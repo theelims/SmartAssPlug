@@ -65,7 +65,7 @@
 			unresponsiveTimeoutData = setTimeout(() => {
 				console.log('Server is unresponsive');
 				dataSocket.close();
-			}, 1000); // Detect unresponsiveness after 1 seconds
+			}, 5000); // Detect unresponsiveness after 1 seconds
 
 			const data = decode(new Uint8Array(event.data));
 

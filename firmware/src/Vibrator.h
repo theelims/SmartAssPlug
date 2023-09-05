@@ -46,8 +46,7 @@ public:
         _speed = constrain(speed, 0, 100);
         int dutyCycle = map(_speed, 0, 100, 0, 255);
 
-        Serial.print("Vibrator: ");
-        Serial.println(dutyCycle);
+        ESP_LOGV("Vibe", "Vibrator Speed: %d", _speed);
         // make vibrator go BRRR
         ledcWrite(VIBRATOR_CHANNEL, dutyCycle);
     }
@@ -64,6 +63,7 @@ private:
         if (instance)
         {
             instance->vibratorPercentage(0);
+            xTimerDelete(instance->timerHandle, portMAX_DELAY);
         }
     }
 };

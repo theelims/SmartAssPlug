@@ -15,27 +15,21 @@
 
 #include <ESP32SvelteKit.h>
 #include <EdgingMqttSettingsService.h>
-#include <NeoPixelBus.h>
 #include <board.h>
 #include <BatteryMonitor.h>
 #include "Adafruit_MPRLS.h"
 #include <SimpleKalmanFilter.h>
-#include <CBOR.h>
-#include <CBOR_parsing.h>
-#include <CBOR_streams.h>
 #include <MqttPubSub.h>
 #include <WebSocketServer.h>
 #include <EdgingDataService.h>
 #include <DataLogging.h>
 #include <Vibrator.h>
+#include <WebSocketRawDataStreaming.h>
+#include <LightShow.h>
 
 #define EDGING_CONTROL_SOCKET_PATH "/ws/control"
-#define EDGING_RAW_DATA_SOCKET_PATH "/ws/rawData"
-
-#define CBORS_DEFAULT_ARRAY_SIZE 256
 
 #define PRESSURE_SAMPLING_INTERVAL 25
-#define WS_PACKET_AGGREGATION_ARRAY 4
 
 #define colorSaturation 128
 
@@ -104,17 +98,17 @@ public:
 private:
     ESP32SvelteKit *_esp32sveltekit;
     AsyncWebServer *_server;
-    AsyncWebSocket ws = AsyncWebSocket(EDGING_RAW_DATA_SOCKET_PATH);
     MqttPubSub<EdgingCore> _mqttPubSub;
     WebSocketServer<EdgingCore> _webSocketServer;
     AsyncMqttClient *_mqttClient;
     EdgingMqttSettingsService _edgingMqttSettingsService;
     EdgingDataService _edgingDataService;
     DataLog _dataLog;
-    uint8_t rawDataWSBytes[CBORS_DEFAULT_ARRAY_SIZE]{0};
-    cbor::BytesPrint rawDataWSPrint{rawDataWSBytes, sizeof(rawDataWSBytes)};
     Vibrator _vibrator;
-
+    LightShow _lightShow;
+#ifdef WS_RAW_DATA_STREAMING
+    WebSocketRawDataStreamer _rawDataStreamer;
+#endif
 #ifdef ADAFRUIT
     Adafruit_MPRLS mpr = Adafruit_MPRLS();
 #else

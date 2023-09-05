@@ -14,20 +14,12 @@
 
 #include <EdgingCoreService.h>
 
-#define colorSaturation 128
-
-RgbColor orgasm(colorSaturation, 0, 0);                /* red */
-RgbColor edging(0, 0, colorSaturation);                /* blue */
-RgbColor aroused(colorSaturation, 0, colorSaturation); /* pink */
-RgbColor stdby(colorSaturation);                       /* white */
-RgbColor off(0);                                       /* black */
-RgbColor neutral(0, colorSaturation, 0);               /* green */
-
-NeoPixelBus<NeoGrbFeature, NeoEsp32I2s0800KbpsMethod> logo = NeoPixelBus<NeoGrbFeature, NeoEsp32I2s0800KbpsMethod>(2, NEOPIXEL);
-
 EdgingCoreService::EdgingCoreService(ESP32SvelteKit *esp32sveltekit) : _esp32sveltekit(esp32sveltekit),
                                                                        _server(esp32sveltekit->getServer()),
-                                                                       _mqttPubSub(EdgingCore::read, EdgingCore::update, this, esp32sveltekit->getMqttClient()),
+                                                                       _mqttPubSub(EdgingCore::read,
+                                                                                   EdgingCore::update,
+                                                                                   this,
+                                                                                   esp32sveltekit->getMqttClient()),
                                                                        _webSocketServer(EdgingCore::read,
                                                                                         EdgingCore::update,
                                                                                         this,
@@ -43,13 +35,13 @@ EdgingCoreService::EdgingCoreService(ESP32SvelteKit *esp32sveltekit) : _esp32sve
                                                                                           esp32sveltekit->getSecurityManager(),
                                                                                           esp32sveltekit->getMqttClient(),
                                                                                           &_edgingMqttSettingsService),
+#ifdef WS_RAW_DATA_STREAMING
+                                                                       _rawDataStreamer(esp32sveltekit->getServer()),
+#endif
                                                                        _dataLog(esp32sveltekit->getServer())
 {
     _state.sessionActive = false;
     _state.sessionType = CLASSIFIER;
-
-    // add raw data websocket
-    _server->addHandler(&ws);
 
     // configure MQTT callback
     _mqttClient->onConnect(std::bind(&EdgingCoreService::registerConfig, this));
@@ -65,9 +57,6 @@ EdgingCoreService::EdgingCoreService(ESP32SvelteKit *esp32sveltekit) : _esp32sve
     addUpdateHandler([&](const String &originId)
                      { onConfigUpdated(); },
                      false);
-
-    // begin neopixel lightshow
-    logo.Begin();
 }
 
 void EdgingCoreService::begin()
@@ -80,19 +69,17 @@ void EdgingCoreService::begin()
         return;
     }
 
-    logo.SetPixelColor(0, stdby);
-    logo.SetPixelColor(1, stdby);
-    logo.Show();
+    _lightShow.setLight();
 
     // Start Sensor Task
     xTaskCreatePinnedToCore(
-        _loopImpl,            /* Task function. */
-        "coreEdgingTask",     /* name of task. */
-        8192,                 /* Stack size of task */
-        this,                 /* parameter of the task */
-        tskIDLE_PRIORITY + 2, /* priority of the task */
-        &coreTaskHandle,      /* Task handle to keep track of created task */
-        1);                   /* pin task to core 1 */
+        _loopImpl,             /* Task function. */
+        "coreEdgingTask",      /* name of task. */
+        4096,                  /* Stack size of task */
+        this,                  /* parameter of the task */
+        tskIDLE_PRIORITY + 10, /* priority of the task */
+        &coreTaskHandle,       /* Task handle to keep track of created task */
+        1);                    /* pin task to core 1 */
 }
 
 void EdgingCoreService::onConfigUpdated()
@@ -144,43 +131,34 @@ void EdgingCoreService::_loop()
     unsigned int rawPressure = 0;
     unsigned int filteredPressure = 0;
     unsigned int timeStamp = 0;
-    int i = 0;
+    float rawSensorReading = 0.0;
+
     while (1)
     {
-        // Write next chunk of data
-        cbor::Writer cborWS{rawDataWSPrint};
-        rawDataWSPrint.reset();
-        cborWS.resetWriteSize();
-        cborWS.beginIndefiniteArray();
-
-        for (size_t i = 0; i < WS_PACKET_AGGREGATION_ARRAY; i++)
+        // Check if sensor reading is valid
+        rawSensorReading = mpr.readPressure();
+        if (std::isnan(rawSensorReading))
         {
-            // 40Hz Update rate
-            vTaskDelayUntil(&xLastWakeTime, PRESSURE_SAMPLING_INTERVAL / portTICK_PERIOD_MS);
-
-            cborWS.beginArray(3);
-
-            // write timestamp
+            ESP_LOGW(ecTAG, "Invalid pressure reading. Status byte: %d", mpr.readStatus());
+        }
+        else
+        {
             timeStamp = millis();
-            cborWS.writeUnsignedInt(timeStamp);
 
-            // read pressure and do math
-            rawPressure = (unsigned int)(mpr.readPressure() * 100);
-            cborWS.writeUnsignedInt(rawPressure);
+            // read pressure and do math for Pascal (no float)
+            rawPressure = (unsigned int)(rawSensorReading * 100);
 
             filteredPressure = (unsigned int)pressureKalmanFilter.updateEstimate((float)rawPressure);
-            cborWS.writeUnsignedInt(filteredPressure);
 
             _dataLog.logRawData(timeStamp, rawPressure, filteredPressure, NEUTRAL);
+#ifdef WS_RAW_DATA_STREAMING
+            _rawDataStreamer.streamRawData(timeStamp, rawPressure, filteredPressure);
+#endif
 
             // ESP_LOGV(ecTAG, "raw: %.2f, kalman %.2f", rawPressure, filteredPressure);
+
+            // 40Hz Update rate
+            vTaskDelayUntil(&xLastWakeTime, PRESSURE_SAMPLING_INTERVAL / portTICK_PERIOD_MS);
         }
-
-        // end indefinite array
-        cborWS.endIndefinite();
-
-        // Send data over websocket
-        size_t length = cborWS.getWriteSize();
-        ws.binaryAll(reinterpret_cast<uint8_t *>(&rawDataWSBytes), length);
     }
 }

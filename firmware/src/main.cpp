@@ -65,10 +65,15 @@ void setup()
     // start serial and filesystem
     Serial.begin(SERIAL_BAUD_RATE);
 
-    // start the framework and demo project
+    // start the framework and project
     esp32sveltekit.setMDNSAppName("SmartAss Plug");
     esp32sveltekit.begin();
     esp32sveltekit.getSleepService()->attachOnSleepCallback(prepareForShutDown);
+#ifdef WS_RAW_DATA_STREAMING
+    esp32sveltekit.getFeatureService()->addFeature("raw_data_streaming", true);
+#else
+    esp32sveltekit.getFeatureService()->addFeature("raw_data_streaming", false);
+#endif
 
     // start the server
     server.begin();
