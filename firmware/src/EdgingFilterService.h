@@ -16,6 +16,7 @@
 #include <HttpEndpoint.h>
 #include <FSPersistence.h>
 #include <SimpleKalmanFilter.h>
+#include <RingBuf.h>
 
 #define FILTER_SETTINGS_FILE "/config/filterSettings.json"
 #define FILTER_SETTINGS_PATH "/rest/filterSettings"
@@ -26,12 +27,14 @@ public:
     float measurementError = 1.0;
     float estimateError = 1.0;
     float processNoise = 1.0;
+    bool interpolateGlitches = true;
 
     static void read(FilterData &settings, JsonObject &root)
     {
         root["measurement_error"] = settings.measurementError;
         root["estimate_error"] = settings.estimateError;
-        root["process_oise"] = settings.processNoise;
+        root["process_noise"] = settings.processNoise;
+        root["interpolate_glitches"] = settings.interpolateGlitches;
     }
 
     static StateUpdateResult update(JsonObject &root, FilterData &settings)
@@ -39,6 +42,7 @@ public:
         settings.measurementError = root["measurement_error"] | 1.0;
         settings.estimateError = root["estimate_error"] | 1.0;
         settings.processNoise = root["process_noise"] | 1.0;
+        settings.interpolateGlitches = root["interpolate_glitches"] | true;
         return StateUpdateResult::CHANGED;
     }
 };
@@ -58,4 +62,5 @@ private:
     HttpEndpoint<FilterData> _httpEndpoint;
     FSPersistence<FilterData> _fsPersistence;
     SimpleKalmanFilter pressureKalmanFilter = SimpleKalmanFilter(_state.measurementError, _state.estimateError, _state.processNoise);
+    RingBuf<float, 3> glitchBuffer;
 };

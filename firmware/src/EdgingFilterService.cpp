@@ -43,5 +43,25 @@ void EdgingFilterService::onConfigUpdated()
 
 float EdgingFilterService::updateEstimate(float input)
 {
+    if (_state.interpolateGlitches)
+    {
+        glitchBuffer.push(input);
+
+        // Glitch Filter
+        // wait until glitch filter is completely filled.
+        if (glitchBuffer.isFull())
+        {
+            // if middle element is above average of first and last element, then correct value to this average
+            float average = (glitchBuffer[0] + glitchBuffer[2]) / 2.0;
+            if (glitchBuffer[1] > average)
+            {
+                glitchBuffer[1] = average;
+            }
+
+            float data;
+            pressureKalmanFilter.updateEstimate(glitchBuffer.pop(data));
+            return data; /* code */
+        }
+    }
     return pressureKalmanFilter.updateEstimate(input);
 }
