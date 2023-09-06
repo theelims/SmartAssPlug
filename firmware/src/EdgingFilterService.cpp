@@ -39,6 +39,12 @@ void EdgingFilterService::onConfigUpdated()
     pressureKalmanFilter.setEstimateError(_state.estimateError);
     pressureKalmanFilter.setMeasurementError(_state.measurementError);
     pressureKalmanFilter.setProcessNoise(_state.processNoise);
+
+    if (!_state.interpolateGlitches)
+    {
+        // clear ring buffer
+        glitchBuffer.clear();
+    }
 }
 
 float EdgingFilterService::updateEstimate(float input)
@@ -48,7 +54,7 @@ float EdgingFilterService::updateEstimate(float input)
         glitchBuffer.push(input);
 
         // Glitch Filter
-        // wait until glitch filter is completely filled.
+        // wait until ring buffer is completely filled.
         if (glitchBuffer.isFull())
         {
             // if middle element is above average of first and last element, then correct value to this average

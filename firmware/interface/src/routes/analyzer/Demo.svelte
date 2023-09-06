@@ -88,7 +88,7 @@
 
 <SettingsCard collapsible={false}>
 	<Light slot="icon" class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
-	<span slot="title">Light State</span>
+	<span slot="title">Analyzer</span>
 	<div class="w-full">
 		<h1 class="text-xl font-semibold">REST Example</h1>
 		<div class="alert alert-info my-2 shadow-lg">

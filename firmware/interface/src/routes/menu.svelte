@@ -50,14 +50,14 @@
 		{
 			title: 'Settings',
 			icon: Control,
-			href: '/demo',
+			href: '/settings',
 			feature: true,
 			active: false
 		},
 		{
 			title: 'Analyzer',
 			icon: Analyzer,
-			href: '/demo',
+			href: '/analyzer',
 			feature: true,
 			active: false
 		},
