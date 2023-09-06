@@ -227,10 +227,10 @@
 						},
 						position: 'left',
 						min: 950,
-						max: 1250,
+						max: 1100,
 						grid: { color: daisyColor('--bc', 10) },
 						ticks: {
-							stepSize: 50,
+							stepSize: 25,
 							color: daisyColor('--bc')
 						},
 						border: { color: daisyColor('--bc', 10) }
@@ -247,10 +247,12 @@
 							}
 						},
 						position: 'right',
-						suggestedMin: -1500,
-						suggestedMax: 1500,
+						//suggestedMin: -1500,
+						//suggestedMax: 1500,
+						min: -750,
+						max: 750,
 						ticks: {
-							stepSize: 500,
+							stepSize: 250,
 							color: daisyColor('--bc')
 						},
 						grid: {
@@ -270,10 +272,12 @@
 							}
 						},
 						position: 'right',
-						suggestedMin: -1500,
-						suggestedMax: 1500,
+						//suggestedMin: -1500,
+						//suggestedMax: 1500,
+						min: -750,
+						max: 750,
 						ticks: {
-							stepSize: 500,
+							stepSize: 250,
 							color: daisyColor('--bc')
 						},
 						grid: {
