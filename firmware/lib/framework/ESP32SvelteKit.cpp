@@ -137,6 +137,9 @@ void ESP32SvelteKit::begin()
 #if FT_ENABLED(FT_OTA)
     _otaSettingsService.begin();
 #endif
+#if FT_ENABLED(FT_ANALYTICS)
+    _analyticsService.begin();
+#endif
 
     xTaskCreatePinnedToCore(
         this->_loopImpl,            // Function that should be called

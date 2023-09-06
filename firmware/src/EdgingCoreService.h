@@ -18,7 +18,6 @@
 #include <board.h>
 #include <BatteryMonitor.h>
 #include "Adafruit_MPRLS.h"
-#include <SimpleKalmanFilter.h>
 #include <MqttPubSub.h>
 #include <WebSocketServer.h>
 #include <EdgingDataService.h>
@@ -26,6 +25,7 @@
 #include <Vibrator.h>
 #include <WebSocketRawDataStreaming.h>
 #include <LightShow.h>
+#include <EdgingFilterService.h>
 
 #define EDGING_CONTROL_SOCKET_PATH "/ws/control"
 
@@ -109,13 +109,12 @@ private:
 #ifdef WS_RAW_DATA_STREAMING
     WebSocketRawDataStreamer _rawDataStreamer;
 #endif
+    EdgingFilterService _edgingFilterService;
 #ifdef ADAFRUIT
     Adafruit_MPRLS mpr = Adafruit_MPRLS();
 #else
     Adafruit_MPRLS mpr = Adafruit_MPRLS(RST_PIN, EOC_PIN, 0, 25, 10, 90, PSI_to_HPA);
 #endif
-
-    SimpleKalmanFilter pressureKalmanFilter = SimpleKalmanFilter(1, 1, 1.0);
 
     void registerConfig();
     void onConfigUpdated();

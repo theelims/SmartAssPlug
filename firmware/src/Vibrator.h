@@ -44,7 +44,11 @@ public:
     {
         // constrain speed to 0-100% and map to 8 bit
         _speed = constrain(speed, 0, 100);
-        int dutyCycle = map(_speed, 0, 100, 0, 255);
+        int dutyCycle = 0;
+        if (_speed >= 1)
+        {
+            dutyCycle = map(_speed, 0, 100, 30, 255);
+        }
 
         ESP_LOGV("Vibe", "Vibrator Speed: %d", _speed);
         // make vibrator go BRRR

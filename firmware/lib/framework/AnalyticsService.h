@@ -27,7 +27,9 @@
 class AnalyticsService
 {
 public:
-    AnalyticsService(NotificationEvents *notificationEvents) : _notificationEvents(notificationEvents)
+    AnalyticsService(NotificationEvents *notificationEvents) : _notificationEvents(notificationEvents){};
+
+    void begin()
     {
         xTaskCreatePinnedToCore(
             this->_loopImpl,            // Function that should be called

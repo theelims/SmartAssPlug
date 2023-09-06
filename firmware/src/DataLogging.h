@@ -99,7 +99,11 @@ public:
             txBuffer.rawPres = rawPressure;
             txBuffer.smoothPres = smoothPressure;
             txBuffer.state = state;
-            return xQueueSend(logQueue, &txBuffer, 0);
+            if (xQueueSend(logQueue, &txBuffer, 0))
+            {
+                ESP_LOGE(dlTAG, "Failed to enqueue logging data");
+                return true;
+            }
         }
 
         // return false on error / file system full

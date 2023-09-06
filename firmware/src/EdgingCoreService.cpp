@@ -38,7 +38,10 @@ EdgingCoreService::EdgingCoreService(ESP32SvelteKit *esp32sveltekit) : _esp32sve
 #ifdef WS_RAW_DATA_STREAMING
                                                                        _rawDataStreamer(esp32sveltekit->getServer()),
 #endif
-                                                                       _dataLog(esp32sveltekit->getServer())
+                                                                       _dataLog(esp32sveltekit->getServer()),
+                                                                       _edgingFilterService(esp32sveltekit->getServer(),
+                                                                                            esp32sveltekit->getFS(),
+                                                                                            esp32sveltekit->getSecurityManager())
 {
     _state.sessionActive = false;
     _state.sessionType = CLASSIFIER;
@@ -148,7 +151,7 @@ void EdgingCoreService::_loop()
             // read pressure and do math for Pascal (no float)
             rawPressure = (unsigned int)(rawSensorReading * 100);
 
-            filteredPressure = (unsigned int)pressureKalmanFilter.updateEstimate((float)rawPressure);
+            filteredPressure = (unsigned int)(_edgingFilterService.updateEstimate(rawSensorReading) * 100);
 
             _dataLog.logRawData(timeStamp, rawPressure, filteredPressure, NEUTRAL);
 #ifdef WS_RAW_DATA_STREAMING
