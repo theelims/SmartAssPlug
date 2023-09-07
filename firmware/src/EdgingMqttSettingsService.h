@@ -39,7 +39,7 @@ public:
     {
         settings.mqttDataPath = root["mqtt_data_path"] | SettingValue::format("smartassplug/#{unique_id}/data");
         settings.mqttControlPath = root["mqtt_control_path"] | SettingValue::format("smartassplug/#{unique_id}/control");
-        settings.uniqueId = root["unique_id"] | SettingValue::format("light-#{unique_id}");
+        settings.uniqueId = root["unique_id"] | SettingValue::format("smartassplug-#{unique_id}");
         return StateUpdateResult::CHANGED;
     }
 };

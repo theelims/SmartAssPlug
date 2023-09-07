@@ -501,7 +501,7 @@
 				class="range range-primary range-xs"
 			/>
 			<label class="label mt-0 pt-0">
-				<span class="label-text">Vibrate</span>
+				<span class="label-text">Vibrator</span>
 				<span class="label-text-alt">{controlState.vibrate} %</span>
 			</label>
 		{/if}

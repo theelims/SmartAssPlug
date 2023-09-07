@@ -53,8 +53,6 @@ EdgingCoreService::EdgingCoreService(ESP32SvelteKit *esp32sveltekit) : _esp32sve
     _edgingMqttSettingsService.addUpdateHandler([&](const String &originId)
                                                 { registerConfig(); },
                                                 false);
-    // start the MQTT broker settings service
-    _edgingMqttSettingsService.begin();
 
     // configure settings service update handler to update state
     addUpdateHandler([&](const String &originId)
@@ -73,6 +71,10 @@ void EdgingCoreService::begin()
     }
 
     _lightShow.setLight();
+
+    // start other settings services
+    _edgingMqttSettingsService.begin();
+    _edgingFilterService.begin();
 
     // Start Sensor Task
     xTaskCreatePinnedToCore(

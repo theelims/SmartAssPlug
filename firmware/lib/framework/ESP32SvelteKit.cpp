@@ -101,6 +101,9 @@ ESP32SvelteKit::ESP32SvelteKit(AsyncWebServer *server) : _featureService(server)
             request->send(404);
         } });
 #endif
+#ifdef SERVE_CONFIG_FILES
+    server->serveStatic("/config/", ESPFS, "/config/");
+#endif
 
 // Enable CORS if required
 #if defined(ENABLE_CORS)

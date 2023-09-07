@@ -75,9 +75,9 @@
 	}
 </script>
 
-<SettingsCard collapsible={false}>
+<SettingsCard collapsible={true} open={false}>
 	<Filter slot="icon" class="lex-shrink-0 mr-2 h-6 w-6 self-end" />
-	<span slot="title">1D-Kalman Filter Settings</span>
+	<span slot="title">Kalman Filter Settings</span>
 	{#await getFilterSettings()}
 		<Spinner />
 	{:then nothing}

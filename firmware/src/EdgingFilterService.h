@@ -24,10 +24,10 @@
 class FilterData
 {
 public:
-    float measurementError = 1.0;
-    float estimateError = 1.0;
-    float processNoise = 1.0;
-    bool interpolateGlitches = true;
+    float measurementError;
+    float estimateError;
+    float processNoise;
+    bool interpolateGlitches;
 
     static void read(FilterData &settings, JsonObject &root)
     {

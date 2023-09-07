@@ -21,7 +21,11 @@ EdgingFilterService::EdgingFilterService(AsyncWebServer *server, FS *fs, Securit
                                                                                                                            FILTER_SETTINGS_PATH,
                                                                                                                            securityManager,
                                                                                                                            AuthenticationPredicates::NONE_REQUIRED),
-                                                                                                             _fsPersistence(FilterData::read, FilterData::update, this, fs, FILTER_SETTINGS_FILE)
+                                                                                                             _fsPersistence(FilterData::read,
+                                                                                                                            FilterData::update,
+                                                                                                                            this,
+                                                                                                                            fs,
+                                                                                                                            FILTER_SETTINGS_FILE)
 {
     // configure settings service update handler to update state
     addUpdateHandler([&](const String &originId)
@@ -32,6 +36,7 @@ EdgingFilterService::EdgingFilterService(AsyncWebServer *server, FS *fs, Securit
 void EdgingFilterService::begin()
 {
     _fsPersistence.readFromFS();
+    onConfigUpdated();
 }
 
 void EdgingFilterService::onConfigUpdated()
