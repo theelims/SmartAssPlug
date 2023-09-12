@@ -17,7 +17,7 @@
 #include <EdgingMqttSettingsService.h>
 #include <board.h>
 #include <BatteryMonitor.h>
-#include "Adafruit_MPRLS.h"
+#include <SparkFun_MicroPressure.h>
 #include <MqttPubSub.h>
 #include <WebSocketServer.h>
 #include <EdgingDataService.h>
@@ -111,9 +111,9 @@ private:
 #endif
     EdgingFilterService _edgingFilterService;
 #ifdef ADAFRUIT
-    Adafruit_MPRLS mpr = Adafruit_MPRLS();
+    SparkFun_MicroPressure mpr;
 #else
-    Adafruit_MPRLS mpr = Adafruit_MPRLS(RST_PIN, EOC_PIN, 0, 25, 10, 90, PSI_to_HPA);
+    SparkFun_MicroPressure mpr = SparkFun_MicroPressure(EOC_PIN, RST_PIN);
 #endif
 
     void registerConfig();

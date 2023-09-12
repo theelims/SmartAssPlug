@@ -46,6 +46,7 @@ void setup()
 #ifdef ADAFRUIT
     pinMode(NEOPIXEL_I2C_POWER, OUTPUT);
     digitalWrite(NEOPIXEL_I2C_POWER, HIGH);
+    Wire.begin();
 
 #else
     // Power on the 3.3V environment

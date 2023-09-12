@@ -3,7 +3,7 @@
 	import { notifications } from '$lib/components/toasts/notifications';
 	import { user } from '$lib/stores/user';
 	import { page } from '$app/stores';
-	import { telemetry } from '$lib/stores/telemetry';
+	import { control } from '$lib/stores/control';
 	import { analytics } from '$lib/stores/analytics';
 	import { Chart, registerables } from 'chart.js';
 	import * as LuxonAdapter from 'chartjs-adapter-luxon';
@@ -20,13 +20,6 @@
 	Chart.register(LuxonAdapter);
 	Chart.register(ChartStreaming);
 
-	type ControlState = {
-		active: boolean;
-		session_type: number;
-		value: number;
-		vibrate: number;
-	};
-
 	let pressureChartElement: HTMLCanvasElement;
 	let pressureChart: Chart;
 
@@ -34,17 +27,10 @@
 	let arousalChart: Chart;
 
 	let dataSocket: WebSocket;
-	let controlSocket: WebSocket;
 	let unresponsiveTimeoutData: number;
 	let timeSync: number = 0;
 	let lastPressure: number = 1024;
 	let lastdpdt: number = 0;
-	let controlState: ControlState = {
-		active: false,
-		session_type: 0,
-		value: 0,
-		vibrate: 0
-	};
 
 	function openDataSocket() {
 		dataSocket = new WebSocket('ws://' + $page.url.host + '/ws/rawData');
@@ -111,31 +97,8 @@
 		};
 	}
 
-	function openControlSocket() {
-		controlSocket = new WebSocket('ws://' + $page.url.host + '/ws/control');
-		console.log(`trying to connect to: ${controlSocket.url}`);
-
-		controlSocket.onopen = () => {
-			console.log(`connection open to: ${controlSocket.url}`);
-		};
-
-		controlSocket.onclose = () => {
-			console.log(`connection closed to: ${controlSocket.url}`);
-		};
-
-		controlSocket.onmessage = (event) => {
-			controlState = JSON.parse(event.data);
-			console.log(controlState);
-		};
-
-		controlSocket.onerror = () => {
-			console.log(`connection error with: ${controlSocket.url}`);
-		};
-	}
-
 	onDestroy(() => {
 		dataSocket.close();
-		controlSocket.close();
 	});
 
 	function daisyColor(name: string, opacity: number = 100) {
@@ -145,7 +108,6 @@
 
 	onMount(() => {
 		openDataSocket();
-		openControlSocket();
 		pressureChart = new Chart(pressureChartElement, {
 			type: 'line',
 			data: {
@@ -449,13 +411,14 @@
 		document.body.removeChild(downloadLink);
 		URL.revokeObjectURL(blobURL);
 	}
+
 	function controlSession() {
-		if (controlState.active === true) {
-			controlState.active = false;
+		if ($control.active === true) {
+			$control.active = false;
 		} else {
-			controlState.active = true;
+			$control.active = true;
 		}
-		controlSocket.send(JSON.stringify(controlState));
+		control.send();
 	}
 </script>
 
@@ -476,15 +439,15 @@
 				type="range"
 				min="0"
 				max="100"
-				bind:value={controlState.value}
+				bind:value={$control.value}
 				on:change={() => {
-					controlSocket.send(JSON.stringify(controlState));
+					control.send();
 				}}
 				class="range range-primary range-xs"
 			/>
 			<label class="label mt-0 pt-0">
 				<span class="label-text">Stimulation</span>
-				<span class="label-text-alt">{controlState.value} %</span>
+				<span class="label-text-alt">{$control.value} %</span>
 			</label>
 		{/if}
 	</div>
@@ -494,15 +457,15 @@
 				type="range"
 				min="0"
 				max="100"
-				bind:value={controlState.vibrate}
+				bind:value={$control.vibrate}
 				on:change={() => {
-					controlSocket.send(JSON.stringify(controlState));
+					control.send();
 				}}
 				class="range range-primary range-xs"
 			/>
 			<label class="label mt-0 pt-0">
 				<span class="label-text">Vibrator</span>
-				<span class="label-text-alt">{controlState.vibrate} %</span>
+				<span class="label-text-alt">{$control.vibrate} %</span>
 			</label>
 		{/if}
 	</div>
@@ -510,7 +473,7 @@
 	<div class="m-4 flex flex-wrap gap-6 justify-between">
 		<div class="flex flex-nowrap justify-start gap-6">
 			<button class="btn btn-primary inline-flex items-center w-32" on:click={controlSession}>
-				{#if controlState.active === false}
+				{#if $control.active === false}
 					<Start class="mr-2 h-5 w-5" /><span>Start</span>
 				{:else}
 					<Stop class="mr-2 h-5 w-5" /><span>Stop</span>
@@ -525,7 +488,7 @@
 		</div>
 
 		<div class="flex flex-nowrap justify-end">
-			{#if controlState.active === true}
+			{#if $control.active === true}
 				<div class="max-h-min">
 					<progress
 						class="progress progress-primary w-min"

@@ -4,7 +4,9 @@
 	import { user } from '$lib/stores/user';
 	import { telemetry } from '$lib/stores/telemetry';
 	import { analytics } from '$lib/stores/analytics';
+	import { control } from '$lib/stores/control';
 	import type { userProfile } from '$lib/stores/user';
+	import type { ControlState } from '$lib/stores/control';
 	import { page } from '$app/stores';
 	import { Modals, closeModal } from 'svelte-modals';
 	import Toast from '$lib/components/toasts/Toast.svelte';
@@ -17,7 +19,9 @@
 
 	export let data: LayoutData;
 
-	//$: console.log($analytics);
+	$: console.log($control);
+
+	let controlSocket: WebSocket;
 
 	onMount(() => {
 		if ($user.bearer_token !== '') {
@@ -25,10 +29,12 @@
 		}
 		menuOpen = false;
 		connectToEventSource();
+		control.setHost($page.url.host);
 	});
 
 	onDestroy(() => {
 		NotificationSource?.close();
+		controlSocket.close();
 	});
 
 	async function validateUser(userdata: userProfile) {

@@ -141,7 +141,7 @@ void EdgingCoreService::_loop()
     while (1)
     {
         // Check if sensor reading is valid
-        rawSensorReading = mpr.readPressure();
+        rawSensorReading = mpr.readPressure(PA);
         if (std::isnan(rawSensorReading))
         {
             ESP_LOGW(ecTAG, "Invalid pressure reading. Status byte: %d", mpr.readStatus());
@@ -151,9 +151,9 @@ void EdgingCoreService::_loop()
             timeStamp = millis();
 
             // read pressure and do math for Pascal (no float)
-            rawPressure = (unsigned int)(rawSensorReading * 100);
+            rawPressure = (unsigned int)(rawSensorReading);
 
-            filteredPressure = (unsigned int)(_edgingFilterService.updateEstimate(rawSensorReading) * 100);
+            filteredPressure = (unsigned int)(_edgingFilterService.updateEstimate(rawSensorReading));
 
             _dataLog.logRawData(timeStamp, rawPressure, filteredPressure, NEUTRAL);
 #ifdef WS_RAW_DATA_STREAMING
