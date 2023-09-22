@@ -16,6 +16,7 @@
 	import NTP from '~icons/tabler/clock-check';
 	import Analyzer from '~icons/tabler/chart-sankey';
 	import Devices from '~icons/tabler/device-remote';
+	import Metrics from '~icons/tabler/report-analytics';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { user } from '$lib/stores/user';
@@ -108,6 +109,13 @@
 					icon: Health,
 					href: '/system/status',
 					feature: true,
+					active: false
+				},
+				{
+					title: 'System Metrics',
+					icon: Metrics,
+					href: '/system/metrics',
+					feature: $page.data.features.analytics,
 					active: false
 				},
 				{
