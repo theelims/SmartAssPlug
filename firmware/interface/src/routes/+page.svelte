@@ -13,6 +13,7 @@
 	import Start from '~icons/tabler/player-play';
 	import Stop from '~icons/tabler/player-stop';
 	import { decode } from 'cbor-x/decode';
+	import { daisyColor } from '$lib/DaisyUiHelper';
 
 	export let data: PageData;
 
@@ -100,11 +101,6 @@
 	onDestroy(() => {
 		dataSocket.close();
 	});
-
-	function daisyColor(name: string, opacity: number = 100) {
-		const color = getComputedStyle(document.documentElement).getPropertyValue(name);
-		return 'hsla(' + color + '/ ' + Math.min(Math.max(Math.round(opacity), 0), 100) + '%)';
-	}
 
 	onMount(() => {
 		openDataSocket();

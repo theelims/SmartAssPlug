@@ -17,7 +17,7 @@
 #include <Arduino.h>
 #include <NeoPixelBus.h>
 
-#define colorSaturation 128
+#define colorSaturation 255
 
 // RgbColor orgasm(colorSaturation, 0, 0);                /* red */
 // RgbColor edging(0, 0, colorSaturation);                /* blue */

@@ -24,9 +24,9 @@ ESP32SvelteKit esp32sveltekit(&server);
 EdgingCoreService edgingCore(&esp32sveltekit);
 
 #ifndef ADAFRUIT
-BatteryMonitor batteryMonitor = BatteryMonitor(esp32sveltekit.getBatteryService(),
-                                               esp32sveltekit.getSleepService(),
-                                               esp32sveltekit.getNotificationEvents());
+// BatteryMonitor batteryMonitor = BatteryMonitor(esp32sveltekit.getBatteryService(),
+//                                                esp32sveltekit.getSleepService(),
+//                                                esp32sveltekit.getNotificationEvents());
 #endif
 
 void prepareForShutDown()
@@ -35,7 +35,7 @@ void prepareForShutDown()
     digitalWrite(NEOPIXEL_I2C_POWER, HIGH);
 #else
     // place fuel gauge chip in power down mode
-    batteryMonitor.powerDown();
+    // batteryMonitor.powerDown();
     // depower periphery
     digitalWrite(ENV_EN, HIGH);
 #endif
@@ -57,7 +57,7 @@ void setup()
     Wire.begin(I2C_SDA, I2C_SCL);
 
     // start battery monitor
-    batteryMonitor.begin();
+    // batteryMonitor.begin();
 #endif
 
     // Initialize Wire for IMU
